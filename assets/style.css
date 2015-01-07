@@ -109,7 +109,7 @@ table tbody tr {
 }
 
 /* heirloom (gold) */
-.name a {
+.name a, .name a:hover {
   color: black;
 }
 

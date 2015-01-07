@@ -45,7 +45,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="toon in toons | orderBy: orderByField : reverseSort ">
-						<td class="color-c{{toon.class}} name">{{toon.name}}</td>
+						<td class="color-c{{toon.class}} name"><a href="http://us.battle.net/wow/en/character/{{toonRealm}}/{{toon.name}}/simple">{{toon.name}}</a></td>
 						<td>{{toon.primarySpec}}, {{toon.secondarySpec}}</td>
 						<td class="{{toon.ilevelThreshold}}">{{toon.ilevel}}</td>
 						<td class="{{toon.maxRingThreshold}}">{{toon.maxRing}}</td>
