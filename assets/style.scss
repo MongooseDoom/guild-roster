@@ -29,7 +29,7 @@ table tbody tr { counter-increment: rowNumber; }
 	.color-q6, .color-q6 a { color: #e5cc80 !important; } /* artifact (gold) */
 	.color-q7, .color-q7 a { color: #e5cc80 !important; } /* heirloom (gold) */
 
-.name a { color: black; }
+.name a, .name a:hover { color: black; }
 
 .gift:before,
 .breath:before,
