@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Guild Roster</title>
+        <meta name="description" content="Guild raiding roster for WoD">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="assets/style.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    </head>
+	<body ng-app="shirleyTemplarsApp">
+		<div ng-controller="armoryCtrl">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th ng-click="orderByField='name'; reverseSort = !reverseSort">Name</th>
+						<th ng-click="orderByField='primarySpec'; reverseSort = !reverseSort">Roles</th>
+						<th ng-click="orderByField='ilevel'; reverseSort = !reverseSort">iLevel</th>
+						<th ng-click="orderByField='maxRing'; reverseSort = !reverseSort">Ring</th>
+						<th ng-click="orderByField='head'; reverseSort = !reverseSort">Head</th>
+						<th ng-click="orderByField='neck'; reverseSort = !reverseSort">Neck</th>
+						<th ng-click="orderByField='shoulder'; reverseSort = !reverseSort">Shoulder</th>
+						<th ng-click="orderByField='back'; reverseSort = !reverseSort">Back</th>
+						<th ng-click="orderByField='chest'; reverseSort = !reverseSort">Chest</th>
+						<th ng-click="orderByField='wrist'; reverseSort = !reverseSort">Wrist</th>
+						<th ng-click="orderByField='hands'; reverseSort = !reverseSort">Hands</th>
+						<th ng-click="orderByField='waist'; reverseSort = !reverseSort">Waist</th>
+						<th ng-click="orderByField='legs'; reverseSort = !reverseSort">Legs</th>
+						<th ng-click="orderByField='feet'; reverseSort = !reverseSort">Feet</th>
+						<th ng-click="orderByField='ring1'; reverseSort = !reverseSort">Ring</th>
+						<th ng-click="orderByField='ring2'; reverseSort = !reverseSort">Ring</th>
+						<th ng-click="orderByField='trinket1'; reverseSort = !reverseSort">Trinket</th>
+						<th ng-click="orderByField='trinket2'; reverseSort = !reverseSort">Trinket</th>
+						<th ng-click="orderByField='mh'; reverseSort = !reverseSort">MH</th>
+						<th ng-click="orderByField='oh'; reverseSort = !reverseSort">OH</th>
+	          			<th ng-click="orderByField='highmaulNormal'; reverseSort = !reverseSort">N HM</th>
+	          			<th ng-click="orderByField='highmaulHeroic'; reverseSort = !reverseSort">H HM</th>
+	          			<th ng-click="orderByField='highmaulMythic'; reverseSort = !reverseSort">M HM</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="toon in toons | orderBy: orderByField : reverseSort ">
+						<td class="color-c{{toon.class}} name">{{toon.name}}</td>
+						<td>{{toon.primarySpec}}, {{toon.secondarySpec}}</td>
+						<td class="{{toon.ilevelThreshold}}">{{toon.ilevel}}</td>
+						<td class="{{toon.maxRingThreshold}}">{{toon.maxRing}}</td>
+						<td ng-class="{'danger': (toon.head <= iLvlThreshold)}" class="color-q{{toon.headQuality}}"><a href="http://www.wowhead.com/item={{toon.headId}}" rel="item={{toon.headId}}">{{toon.head}}</a></td>
+						<td ng-class="{'danger': (toon.neck <= iLvlThreshold)}" class="color-q{{toon.neckQuality}} {{toon.neckEnchant}}"><a href="http://www.wowhead.com/item={{toon.neckId}}" rel="item={{toon.neckId}}">{{toon.neck}}</a></td>
+						<td ng-class="{'danger': (toon.shoulder <= iLvlThreshold)}" class="color-q{{toon.shoulderQuality}}"><a href="http://www.wowhead.com/item={{toon.shoulderId}}" rel="item={{toon.shoulderId}}">{{toon.shoulder}}</a></td>
+						<td ng-class="{'danger': (toon.back <= iLvlThreshold)}" class="color-q{{toon.backQuality}} {{toon.backEnchant}}"><a href="http://www.wowhead.com/item={{toon.backId}}" rel="item={{toon.backId}}">{{toon.back}}</a></td>
+						<td ng-class="{'danger': (toon.chest <= iLvlThreshold)}" class="color-q{{toon.chestQuality}}"><a href="http://www.wowhead.com/item={{toon.chestId}}" rel="item={{toon.chestId}}">{{toon.chest}}</a></td>
+						<td ng-class="{'danger': (toon.wrist <= iLvlThreshold)}" class="color-q{{toon.wristQuality}}"><a href="http://www.wowhead.com/item={{toon.wristId}}" rel="item={{toon.wristId}}">{{toon.wrist}}</a></td>
+						<td ng-class="{'danger': (toon.hands <= iLvlThreshold)}" class="color-q{{toon.handsQuality}}"><a href="http://www.wowhead.com/item={{toon.handsId}}" rel="item={{toon.handsId}}">{{toon.hands}}</a></td>
+						<td ng-class="{'danger': (toon.waist <= iLvlThreshold)}" class="color-q{{toon.waistQuality}}"><a href="http://www.wowhead.com/item={{toon.waistId}}" rel="item={{toon.waistId}}">{{toon.waist}}</a></td>
+						<td ng-class="{'danger': (toon.legs <= iLvlThreshold)}" class="color-q{{toon.legsQuality}}"><a href="http://www.wowhead.com/item={{toon.legsId}}" rel="item={{toon.legsId}}">{{toon.legs}}</a></td>
+						<td ng-class="{'danger': (toon.feet <= iLvlThreshold)}" class="color-q{{toon.feetQuality}}"><a href="http://www.wowhead.com/item={{toon.feetId}}" rel="item={{toon.feetId}}">{{toon.feet}}</a></td>
+						<td ng-class="{'danger': (toon.ring1 <= iLvlThreshold)}" class="color-q{{toon.ring1Quality}} {{toon.ring1Enchant}}"><a href="http://www.wowhead.com/item={{toon.ring1Id}}" rel="item={{toon.ring1Id}}">{{toon.ring1}}</a></td>
+						<td ng-class="{'danger': (toon.ring2 <= iLvlThreshold)}" class="color-q{{toon.ring2Quality}} {{toon.ring2Enchant}}"><a href="http://www.wowhead.com/item={{toon.ring2Id}}" rel="item={{toon.ring2Id}}">{{toon.ring2}}</a></td>
+						<td ng-class="{'danger': (toon.trinket1 <= iLvlThreshold)}" class="color-q{{toon.trinket1Quality}}"><a href="http://www.wowhead.com/item={{toon.trinket1Id}}" rel="item={{toon.trinket1Id}}">{{toon.trinket1}}</a></td>
+						<td ng-class="{'danger': (toon.trinket2 <= iLvlThreshold)}" class="color-q{{toon.trinket2Quality}}"><a href="http://www.wowhead.com/item={{toon.trinket2Id}}" rel="item={{toon.trinket2Id}}">{{toon.trinket2}}</a></td>
+						<td ng-class="{'danger': (toon.mh <= iLvlThreshold)}" class="color-q{{toon.mhQuality}} {{toon.mhEnchant}}"><a href="http://www.wowhead.com/item={{toon.mhId}}" rel="item={{toon.mhId}}">{{toon.mh}}</a></td>
+						<td ng-class="{'danger': (toon.oh != "" && toon.oh <= iLvlThreshold)}" class="color-q{{toon.ohQuality}}"><a href="http://www.wowhead.com/item={{toon.ohId}}" rel="item={{toon.ohId}}">{{toon.oh}}</a></td>
+						<td>{{toon.highmaulNormal}}</td>
+						<td>{{toon.highmaulHeroic}}</td>
+						<td>{{toon.highmaulMythic}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
+		<script type="text/javascript" src="app/app.js"></script>
+		<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script><script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": false }</script>
+	</body>
+</html>

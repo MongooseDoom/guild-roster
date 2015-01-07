@@ -1,0 +1,47 @@
+.table tbody tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+}
+table { counter-reset: rowNumber; }
+table tbody tr { counter-increment: rowNumber; }
+
+/* class */
+	.color-c1 { background: #c69b6d !important; } /* warrior */
+	.color-c2 { background: #f48cba !important; } /* paladin */
+	.color-c3 { background: #aad372 !important; } /* hunter */
+	.color-c4 { background: #fff468 !important; } /* rogue */
+	.color-c5 { background: #fff !important; } /* priest */
+	.color-c6 { background: #c41e3b !important; } /* death knight */
+	.color-c7 { background: #2359ff !important; } /* shaman */
+	.color-c8 { background: #68ccef !important; } /* mage */
+	.color-c9 { background: #9382c9 !important; } /* warlock */
+	.color-c10 { background: #00ffba !important; } /* monk */
+	.color-c11 { background: #ff7c0a !important; } /* druid */
+
+	/* item quality */
+	.color-q0, .color-q0 a { color: #9d9d9d !important; } /* poor (gray) */
+	.color-q1, .color-q1 a { color: #ffffff !important; } /* common (white) */
+	.color-q2, .color-q2 a { color: #1eff00 !important; } /* uncommon (green) */
+	.color-q3, .color-q3 a { color: #0081ff !important; } /* #0070dd rare (blue) */
+	.color-q4, .color-q4 a { color: #c600ff !important; } /* #a335ee epic (purple) */
+	.color-q5, .color-q5 a { color: #ff8000 !important; } /* lengendary (orange) */
+	.color-q6, .color-q6 a { color: #e5cc80 !important; } /* artifact (gold) */
+	.color-q7, .color-q7 a { color: #e5cc80 !important; } /* heirloom (gold) */
+
+.name a { color: black; }
+
+.gift:before,
+.breath:before,
+.none:before {
+	content: '';
+	display: inline-block;
+	margin-right: 5px;
+	height: 10px;
+	width: 10px;
+	border-radius: 100%;
+}
+
+.gift:before { background: darken(#dff0d8, 25%); }
+.breath:before { background: darken(#fcf8e3, 25%); }
+.none:before { background: darken(#f2dede, 25%); }
