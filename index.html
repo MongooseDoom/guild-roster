@@ -9,8 +9,9 @@
         <title>Guild Roster</title>
         <meta name="description" content="Guild raiding roster for WoD">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="assets/style.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="assets/style.css">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     </head>
 	<body ng-app="shirleyTemplarsApp">
@@ -18,29 +19,121 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th ng-click="orderByField='name'; reverseSort = !reverseSort">Name</th>
-						<th ng-click="orderByField='primarySpec'; reverseSort = !reverseSort">Roles</th>
-						<th ng-click="orderByField='ilevel'; reverseSort = !reverseSort">iLevel</th>
-						<th ng-click="orderByField='maxRing'; reverseSort = !reverseSort">Ring</th>
-						<th ng-click="orderByField='head'; reverseSort = !reverseSort">Head</th>
-						<th ng-click="orderByField='neck'; reverseSort = !reverseSort">Neck</th>
-						<th ng-click="orderByField='shoulder'; reverseSort = !reverseSort">Shoulder</th>
-						<th ng-click="orderByField='back'; reverseSort = !reverseSort">Back</th>
-						<th ng-click="orderByField='chest'; reverseSort = !reverseSort">Chest</th>
-						<th ng-click="orderByField='wrist'; reverseSort = !reverseSort">Wrist</th>
-						<th ng-click="orderByField='hands'; reverseSort = !reverseSort">Hands</th>
-						<th ng-click="orderByField='waist'; reverseSort = !reverseSort">Waist</th>
-						<th ng-click="orderByField='legs'; reverseSort = !reverseSort">Legs</th>
-						<th ng-click="orderByField='feet'; reverseSort = !reverseSort">Feet</th>
-						<th ng-click="orderByField='ring1'; reverseSort = !reverseSort">Ring</th>
-						<th ng-click="orderByField='ring2'; reverseSort = !reverseSort">Ring</th>
-						<th ng-click="orderByField='trinket1'; reverseSort = !reverseSort">Trinket</th>
-						<th ng-click="orderByField='trinket2'; reverseSort = !reverseSort">Trinket</th>
-						<th ng-click="orderByField='mh'; reverseSort = !reverseSort">MH</th>
-						<th ng-click="orderByField='oh'; reverseSort = !reverseSort">OH</th>
-	          			<th ng-click="orderByField='highmaulNormal'; reverseSort = !reverseSort">N HM</th>
-	          			<th ng-click="orderByField='highmaulHeroic'; reverseSort = !reverseSort">H HM</th>
-	          			<th ng-click="orderByField='highmaulMythic'; reverseSort = !reverseSort">M HM</th>
+						<th ng-click="orderByField='name'; reverseSort = !reverseSort">
+							Name
+							<span ng-show="orderByField == 'name' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'name' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='primarySpec'; reverseSort = !reverseSort">
+							Roles
+							<span ng-show="orderByField == 'primarySpec' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'primarySpec' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='ilevel'; reverseSort = !reverseSort">
+							iLevel
+							<span ng-show="orderByField == 'ilevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'ilevel' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='maxRing'; reverseSort = !reverseSort">
+							Ring
+							<span ng-show="orderByField == 'maxRing' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'maxRing' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='head'; reverseSort = !reverseSort">
+							Head
+							<span ng-show="orderByField == 'head' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'head' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='neck'; reverseSort = !reverseSort">
+							Neck
+							<span ng-show="orderByField == 'neck' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'neck' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='shoulder'; reverseSort = !reverseSort">
+							Shoulder
+							<span ng-show="orderByField == 'shoulder' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'shoulder' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='back'; reverseSort = !reverseSort">
+							Back
+							<span ng-show="orderByField == 'back' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'back' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='chest'; reverseSort = !reverseSort">
+							Chest
+							<span ng-show="orderByField == 'chest' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'chest' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='wrist'; reverseSort = !reverseSort">
+							Wrist
+							<span ng-show="orderByField == 'wrist' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'wrist' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='hands'; reverseSort = !reverseSort">
+							Hands
+							<span ng-show="orderByField == 'hands' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'hands' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='waist'; reverseSort = !reverseSort">
+							Waist
+							<span ng-show="orderByField == 'waist' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'waist' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='legs'; reverseSort = !reverseSort">
+							Legs
+							<span ng-show="orderByField == 'legs' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'legs' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='feet'; reverseSort = !reverseSort">
+							Feet
+							<span ng-show="orderByField == 'feet' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'feet' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='ring1'; reverseSort = !reverseSort">
+							Ring
+							<span ng-show="orderByField == 'ring1' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'ring1' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='ring2'; reverseSort = !reverseSort">
+							Ring
+							<span ng-show="orderByField == 'ring2' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'ring2' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='trinket1'; reverseSort = !reverseSort">
+							Trinket
+							<span ng-show="orderByField == 'trinket1' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'trinket1' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='trinket2'; reverseSort = !reverseSort">
+							Trinket
+							<span ng-show="orderByField == 'trinket2' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'trinket2' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='mh'; reverseSort = !reverseSort">
+							MH
+							<span ng-show="orderByField == 'mh' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'mh' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+						<th ng-click="orderByField='oh'; reverseSort = !reverseSort">
+							OH
+							<span ng-show="orderByField == 'oh' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'oh' && reverseSort" class="fa fa-caret-up"></span>
+						</th>
+	          			<th ng-click="orderByField='highmaulNormal'; reverseSort = !reverseSort">
+	          				N HM
+	          				<span ng-show="orderByField == 'highmaulNormal' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'highmaulNormal' && reverseSort" class="fa fa-caret-up"></span>
+	          			</th>
+	          			<th ng-click="orderByField='highmaulHeroic'; reverseSort = !reverseSort">
+	          				H HM
+	          				<span ng-show="orderByField == 'highmaulHeroic' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'highmaulHeroic' && reverseSort" class="fa fa-caret-up"></span>
+	          			</th>
+	          			<th ng-click="orderByField='highmaulMythic'; reverseSort = !reverseSort">
+	          				M HM
+	          				<span ng-show="orderByField == 'highmaulMythic' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'highmaulMythic' && reverseSort" class="fa fa-caret-up"></span>
+	          			</th>
 					</tr>
 				</thead>
 				<tbody>
