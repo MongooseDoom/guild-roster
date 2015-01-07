@@ -23,8 +23,8 @@ app.controller('armoryCtrl', function ($scope, $http) {
 	{name: 'Faerietta'},
 	{name: 'Flatugen'}
 	];
-	$scope.orderByField = 'name';
-	$scope.reverseSort = false;
+	$scope.orderByField = 'ilevel';
+	$scope.reverseSort = true;
 	$scope.toonRealm = "Tichondrius";
 	$scope.iLvlThreshold = 625;
 	$scope.ringThreshold = 680;
@@ -41,7 +41,6 @@ app.controller('armoryCtrl', function ($scope, $http) {
 			toon.ilevelThreshold = returnThreshold(toon.ilevel);
 			toon.maxRing = Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
 			toon.maxRingThreshold = returnMaxRing(toon.maxRing);
-			console.log(data);
 
 			var giftindex = [5310, 5317, 5311, 5324, 5318, 5325, 5312, 5319, 5326, 5313, 5320, 5327, 5314, 5321, 5328],
 			breathindex = [5281, 5285, 5284, 5298, 5292, 5297, 5300, 5293, 5299, 5302, 5294, 5301, 5304, 5295, 5303]
