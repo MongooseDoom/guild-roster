@@ -164,7 +164,7 @@
 						<td ng-class="{'danger': (toon.trinket1 <= iLvlThreshold)}" class="color-q{{toon.trinket1Quality}}"><a href="http://www.wowhead.com/item={{toon.trinket1Id}}" rel="item={{toon.trinket1Id}}">{{toon.trinket1}}</a></td>
 						<td ng-class="{'danger': (toon.trinket2 <= iLvlThreshold)}" class="color-q{{toon.trinket2Quality}}"><a href="http://www.wowhead.com/item={{toon.trinket2Id}}" rel="item={{toon.trinket2Id}}">{{toon.trinket2}}</a></td>
 						<td ng-class="{'danger': (toon.mh <= iLvlThreshold)}" class="color-q{{toon.mhQuality}} {{toon.mhEnchant}}"><a href="http://www.wowhead.com/item={{toon.mhId}}" rel="item={{toon.mhId}}">{{toon.mh}}</a></td>
-						<td ng-class="{'danger': (toon.oh != "" && toon.oh <= iLvlThreshold)}" class="color-q{{toon.ohQuality}}"><a href="http://www.wowhead.com/item={{toon.ohId}}" rel="item={{toon.ohId}}">{{toon.oh}}</a></td>
+						<td ng-class="{'danger': (toon.oh && toon.oh <= iLvlThreshold)}" class="color-q{{toon.ohQuality}}"><a href="http://www.wowhead.com/item={{toon.ohId}}" rel="item={{toon.ohId}}">{{toon.oh}}</a></td>
 						<td>{{toon.highmaulNormal}}</td>
 						<td>{{toon.highmaulHeroic}}</td>
 						<td>{{toon.highmaulMythic}}</td>
@@ -175,6 +175,6 @@
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
 		<script type="text/javascript" src="app/app.js"></script>
-		<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script><script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": false }</script>
+		<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>
 	</body>
 </html>
