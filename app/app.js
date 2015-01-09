@@ -177,6 +177,7 @@ $http.jsonp("http://us.battle.net/api/wow/character/"+realm+"/"+toon.name+"?fiel
 			toon.highmaulMythic = highmaul[2];
 
 			$scope.toons.push(toon);
+			$scope.formToon = "";
 
 		}).
 error(function(data, status, hearders, config){
