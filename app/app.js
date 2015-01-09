@@ -1,4 +1,4 @@
-var app = angular.module('shirleyTemplarsApp', []);
+var app = angular.module('shirleyTemplarsApp', ['ui.bootstrap']);
 
 app.controller('armoryCtrl', function ($scope, $http) {
 	$scope.toons = [
@@ -30,6 +30,16 @@ app.controller('armoryCtrl', function ($scope, $http) {
 	$scope.iLvlThreshold = 625;
 	$scope.ringThreshold = 680;
 	$scope.formRealm = $scope.toonRealm;
+	$scope.realms = [];
+
+	// Get Realms
+	$http.jsonp('http://us.battle.net/api/wow/realm/status?jsonp=JSON_CALLBACK').success(function(data, status, headers, config) {
+		data.realms.map(function(item){
+			$scope.realms.push(item.name);
+		});
+	}).error(function(data, status, headers, config) {
+
+	});
 
 	$scope.addToon = function(toon, realm){
 		toon = {name: $scope.formToon};
