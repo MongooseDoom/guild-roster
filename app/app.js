@@ -46,7 +46,6 @@ app.controller('armoryCtrl', function ($scope, $http) {
 		realm = $scope.formRealm;
 $http.jsonp("http://us.battle.net/api/wow/character/"+realm+"/"+toon.name+"?fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").
 		success(function(data, status, hearders, config){
-			console.log(toon);
 			toon.class = data.class;
 			toon.className = returnClassName(data.class);
 			toon.primarySpec = data.talents[0].spec.role.toLowerCase();
