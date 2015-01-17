@@ -21,7 +21,8 @@ app.controller('armoryCtrl', function ($scope, $http) {
 	{name: 'Wroughtiron'},
 	{name: 'Tatersakk'},
 	{name: 'Faerietta'},
-	{name: 'Flatugen'}
+	{name: 'Flatugen'},
+	{name: 'Saluja'}
 	];
 	$scope.orderByField = 'ilevel';
 	$scope.reverseSort = true;
