@@ -14,20 +14,20 @@
 		<link rel="stylesheet" href="assets/style.css">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     </head>
-	<body ng-app="shirleyTemplarsApp">
-		<div ng-controller="armoryCtrl">
+	<body ng-app="guildRosterApp">
+		<div ng-controller="guildRosterCtrl">
 			<nav class="navbar navbar-default">
-				<span class="navbar-brand">{{toonGuild}}</span>
-				<span class="navbar-text">{{toonRealm}}</span>
+				<span class="navbar-brand">{{guildName}}</span>
+				<span class="navbar-text">{{guildRealm}}</span>
 				<form class="navbar-form navbar-left">
 					<div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-user"></i></div>
-						<input type="text" class="form-control" placeholder="Name" ng-model="formToon">
+						<input type="text" class="form-control" placeholder="Name" ng-model="formcharacter">
 					</div>
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="Realm" typeahead="name for name in realms | filter:$viewValue | limitTo:8" ng-model="formRealm">
 					</div>
-					<button type="submit" class="btn btn-default" ng-click="addToon()">Add</button>
+					<button type="submit" class="btn btn-default" ng-click="addcharacter()">Add</button>
 				</form>
 				<form class="navbar-form navbar-left" Role="search">
 					<div class="input-group">
@@ -36,6 +36,11 @@
 					</div>
 				</form>
 			</nav>
+			<div ng-show="errorText" class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{errorText}}
+			</div>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -157,30 +162,30 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="toon in toons | orderBy: orderByField : reverseSort | filter:searchRoster">
-						<td class="color-c{{toon.class}} name"><a href="http://us.battle.net/wow/en/character/{{toonRealm}}/{{toon.name}}/simple">{{toon.name}}</a></td>
-						<td>{{toon.primarySpec}}, {{toon.secondarySpec}}</td>
-						<td class="{{toon.ilevelThreshold}}">{{toon.ilevel}}</td>
-						<td class="{{toon.maxRingThreshold}}">{{toon.maxRing}}</td>
-						<td ng-class="{'danger': (toon.head <= iLvlThreshold)}" class="color-q{{toon.headQuality}}"><a href="http://www.wowhead.com/item={{toon.headId}}" rel="item={{toon.headId}}">{{toon.head}}</a></td>
-						<td ng-class="{'danger': (toon.neck <= iLvlThreshold)}" class="color-q{{toon.neckQuality}} {{toon.neckEnchant}}"><a href="http://www.wowhead.com/item={{toon.neckId}}" rel="item={{toon.neckId}}">{{toon.neck}}</a></td>
-						<td ng-class="{'danger': (toon.shoulder <= iLvlThreshold)}" class="color-q{{toon.shoulderQuality}}"><a href="http://www.wowhead.com/item={{toon.shoulderId}}" rel="item={{toon.shoulderId}}">{{toon.shoulder}}</a></td>
-						<td ng-class="{'danger': (toon.back <= iLvlThreshold)}" class="color-q{{toon.backQuality}} {{toon.backEnchant}}"><a href="http://www.wowhead.com/item={{toon.backId}}" rel="item={{toon.backId}}">{{toon.back}}</a></td>
-						<td ng-class="{'danger': (toon.chest <= iLvlThreshold)}" class="color-q{{toon.chestQuality}}"><a href="http://www.wowhead.com/item={{toon.chestId}}" rel="item={{toon.chestId}}">{{toon.chest}}</a></td>
-						<td ng-class="{'danger': (toon.wrist <= iLvlThreshold)}" class="color-q{{toon.wristQuality}}"><a href="http://www.wowhead.com/item={{toon.wristId}}" rel="item={{toon.wristId}}">{{toon.wrist}}</a></td>
-						<td ng-class="{'danger': (toon.hands <= iLvlThreshold)}" class="color-q{{toon.handsQuality}}"><a href="http://www.wowhead.com/item={{toon.handsId}}" rel="item={{toon.handsId}}">{{toon.hands}}</a></td>
-						<td ng-class="{'danger': (toon.waist <= iLvlThreshold)}" class="color-q{{toon.waistQuality}}"><a href="http://www.wowhead.com/item={{toon.waistId}}" rel="item={{toon.waistId}}">{{toon.waist}}</a></td>
-						<td ng-class="{'danger': (toon.legs <= iLvlThreshold)}" class="color-q{{toon.legsQuality}}"><a href="http://www.wowhead.com/item={{toon.legsId}}" rel="item={{toon.legsId}}">{{toon.legs}}</a></td>
-						<td ng-class="{'danger': (toon.feet <= iLvlThreshold)}" class="color-q{{toon.feetQuality}}"><a href="http://www.wowhead.com/item={{toon.feetId}}" rel="item={{toon.feetId}}">{{toon.feet}}</a></td>
-						<td ng-class="{'danger': (toon.ring1 <= iLvlThreshold)}" class="color-q{{toon.ring1Quality}} {{toon.ring1Enchant}}"><a href="http://www.wowhead.com/item={{toon.ring1Id}}" rel="item={{toon.ring1Id}}">{{toon.ring1}}</a></td>
-						<td ng-class="{'danger': (toon.ring2 <= iLvlThreshold)}" class="color-q{{toon.ring2Quality}} {{toon.ring2Enchant}}"><a href="http://www.wowhead.com/item={{toon.ring2Id}}" rel="item={{toon.ring2Id}}">{{toon.ring2}}</a></td>
-						<td ng-class="{'danger': (toon.trinket1 <= iLvlThreshold)}" class="color-q{{toon.trinket1Quality}}"><a href="http://www.wowhead.com/item={{toon.trinket1Id}}" rel="item={{toon.trinket1Id}}">{{toon.trinket1}}</a></td>
-						<td ng-class="{'danger': (toon.trinket2 <= iLvlThreshold)}" class="color-q{{toon.trinket2Quality}}"><a href="http://www.wowhead.com/item={{toon.trinket2Id}}" rel="item={{toon.trinket2Id}}">{{toon.trinket2}}</a></td>
-						<td ng-class="{'danger': (toon.mh <= iLvlThreshold)}" class="color-q{{toon.mhQuality}} {{toon.mhEnchant}}"><a href="http://www.wowhead.com/item={{toon.mhId}}" rel="item={{toon.mhId}}">{{toon.mh}}</a></td>
-						<td ng-class="{'danger': (toon.oh && toon.oh <= iLvlThreshold)}" class="color-q{{toon.ohQuality}}"><a href="http://www.wowhead.com/item={{toon.ohId}}" rel="item={{toon.ohId}}">{{toon.oh}}</a></td>
-						<td>{{toon.highmaulNormal}}</td>
-						<td>{{toon.highmaulHeroic}}</td>
-						<td>{{toon.highmaulMythic}}</td>
+					<tr ng-repeat="character in characters | orderBy: orderByField : reverseSort | filter:searchRoster">
+						<td class="color-c{{character.class}} name"><a href="http://us.battle.net/wow/en/character/{{characterRealm}}/{{character.name}}/simple">{{character.name}}</a></td>
+						<td>{{character.primarySpec}}, {{character.secondarySpec}}</td>
+						<td class="{{character.ilevelThreshold}}">{{character.items.averageItemLevelEquipped}}</td>
+						<td class="{{character.maxRingThreshold}}">{{character.maxRing}}</td>
+						<td ng-class="{'danger': (character.items.head.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.head.quality}}"><a href="http://www.wowhead.com/item={{character.items.head.id}}" rel="item={{character.items.head.id}}">{{character.items.head.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.neck.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.neck.quality}} {{character.neckEnchant}}"><a href="http://www.wowhead.com/item={{character.items.neck.id}}" rel="item={{character.items.neck.id}}">{{character.items.neck.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.shoulder <= iLvlThreshold)}" class="color-q{{character.shoulderQuality}}"><a href="http://www.wowhead.com/item={{character.shoulderId}}" rel="item={{character.shoulderId}}">{{character.shoulder}}</a></td>
+						<td ng-class="{'danger': (character.back <= iLvlThreshold)}" class="color-q{{character.backQuality}} {{character.backEnchant}}"><a href="http://www.wowhead.com/item={{character.backId}}" rel="item={{character.backId}}">{{character.back}}</a></td>
+						<td ng-class="{'danger': (character.chest <= iLvlThreshold)}" class="color-q{{character.chestQuality}}"><a href="http://www.wowhead.com/item={{character.chestId}}" rel="item={{character.chestId}}">{{character.chest}}</a></td>
+						<td ng-class="{'danger': (character.wrist <= iLvlThreshold)}" class="color-q{{character.wristQuality}}"><a href="http://www.wowhead.com/item={{character.wristId}}" rel="item={{character.wristId}}">{{character.wrist}}</a></td>
+						<td ng-class="{'danger': (character.hands <= iLvlThreshold)}" class="color-q{{character.handsQuality}}"><a href="http://www.wowhead.com/item={{character.handsId}}" rel="item={{character.handsId}}">{{character.hands}}</a></td>
+						<td ng-class="{'danger': (character.waist <= iLvlThreshold)}" class="color-q{{character.waistQuality}}"><a href="http://www.wowhead.com/item={{character.waistId}}" rel="item={{character.waistId}}">{{character.waist}}</a></td>
+						<td ng-class="{'danger': (character.legs <= iLvlThreshold)}" class="color-q{{character.legsQuality}}"><a href="http://www.wowhead.com/item={{character.legsId}}" rel="item={{character.legsId}}">{{character.legs}}</a></td>
+						<td ng-class="{'danger': (character.feet <= iLvlThreshold)}" class="color-q{{character.feetQuality}}"><a href="http://www.wowhead.com/item={{character.feetId}}" rel="item={{character.feetId}}">{{character.feet}}</a></td>
+						<td ng-class="{'danger': (character.ring1 <= iLvlThreshold)}" class="color-q{{character.ring1Quality}} {{character.ring1Enchant}}"><a href="http://www.wowhead.com/item={{character.ring1Id}}" rel="item={{character.ring1Id}}">{{character.ring1}}</a></td>
+						<td ng-class="{'danger': (character.ring2 <= iLvlThreshold)}" class="color-q{{character.ring2Quality}} {{character.ring2Enchant}}"><a href="http://www.wowhead.com/item={{character.ring2Id}}" rel="item={{character.ring2Id}}">{{character.ring2}}</a></td>
+						<td ng-class="{'danger': (character.trinket1 <= iLvlThreshold)}" class="color-q{{character.trinket1Quality}}"><a href="http://www.wowhead.com/item={{character.trinket1Id}}" rel="item={{character.trinket1Id}}">{{character.trinket1}}</a></td>
+						<td ng-class="{'danger': (character.trinket2 <= iLvlThreshold)}" class="color-q{{character.trinket2Quality}}"><a href="http://www.wowhead.com/item={{character.trinket2Id}}" rel="item={{character.trinket2Id}}">{{character.trinket2}}</a></td>
+						<td ng-class="{'danger': (character.mh <= iLvlThreshold)}" class="color-q{{character.mhQuality}} {{character.mhEnchant}}"><a href="http://www.wowhead.com/item={{character.mhId}}" rel="item={{character.mhId}}">{{character.mh}}</a></td>
+						<td ng-class="{'danger': (character.oh && character.oh <= iLvlThreshold)}" class="color-q{{character.ohQuality}}"><a href="http://www.wowhead.com/item={{character.ohId}}" rel="item={{character.ohId}}">{{character.oh}}</a></td>
+						<td>{{character.highmaulNormal}}</td>
+						<td>{{character.highmaulHeroic}}</td>
+						<td>{{character.highmaulMythic}}</td>
 					</tr>
 				</tbody>
 			</table>
