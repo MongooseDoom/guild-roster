@@ -62,12 +62,54 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	} /* end getRealms() */
 
 	/**
+	* Checks item for enchant
+	* @param {object} item - Item with enchant
+	*/
+	$scope.getEnchant = function(item){
+		/* Enchants */
+		var giftindex = [5310, 5317, 5311, 5324, 5318, 5325, 5312, 5319, 5326, 5313, 5320, 5327, 5314, 5321, 5328];
+		var breathindex = [5281, 5285, 5284, 5298, 5292, 5297, 5300, 5293, 5299, 5302, 5294, 5301, 5304, 5295, 5303];
+		var wepchantID = [5336, 5335, 5334, 5331, 5276, 5275, 5383, 5330, 5337, 5384];
+
+		if (item) {
+			var enchant;
+			if (giftindex.indexOf(item.tooltipParams["enchant"]) > -1 || wepchantID.indexOf(item.tooltipParams["enchant"]) > -1) {
+				enchant = "gift";
+			} else if (breathindex.indexOf(item.tooltipParams["enchant"]) > -1) {
+				enchant = "breath";
+			} else {
+				enchant = "none";
+			}
+		} else {
+			enchant = "none";
+		}
+			return enchant;
+	}  /* end getEnchant() */
+
+	/**
 	* Adds a character
 	* @param {string} character - The name of the character
 	* @param {string} realm - The name of the character's realm
 	*/
 	$scope.addCharacter = function(character, realm){
 		$http.jsonp("http://us.battle.net/api/wow/character/"+realm+"/"+character+"?fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
+					data.ilevelThreshold = returnThreshold(data.items.averageItemLevelEquipped);
+					function returnThreshold(ilvl){
+						if (ilvl >= $scope.iLvlThreshold) {
+							return "success";
+						} else {
+							return "danger";
+						}
+					}
+					data.maxRing = function(){
+						return Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
+					}
+					if (!data.items.offHand) {
+						data.items.offHand = "";
+						data.items.offHand.itemLevel = "";
+						data.items.offHand.quality = "";
+					}
+
 				$scope.characters.push(data);
 				console.log(data);
 		}).error(function(data, status, hearders, config){
