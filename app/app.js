@@ -5,6 +5,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	/* Guild Info */
 		$scope.guildName = "Shirley Templars";
 		$scope.guildRealm = "Tichondrius";
+		$scope.region = "us"; /* http://blizzard.github.io/api-wow-docs/#localization */
 
 	/* Member Info */
 		$scope.guildMembers = [
@@ -52,7 +53,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	* Gets all US WoW Realms
 	*/
 	$scope.getRealms = function(){
-		$http.jsonp('http://us.battle.net/api/wow/realm/status?jsonp=JSON_CALLBACK').success(function(data, status, headers, config) {
+		$http.jsonp('http://'+$scope.region+'.battle.net/api/wow/realm/status?jsonp=JSON_CALLBACK').success(function(data, status, headers, config) {
 			data.realms.map(function(item){
 				$scope.realms.push(item.name);
 			});
@@ -92,7 +93,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	* @param {string} realm - The name of the character's realm
 	*/
 	$scope.addCharacter = function(character, realm){
-		$http.jsonp("http://us.battle.net/api/wow/character/"+realm+"/"+character+"?fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
+		$http.jsonp("http://"$scope.region".battle.net/api/wow/character/"+realm+"/"+character+"?fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
 					data.ilevelThreshold = returnThreshold(data.items.averageItemLevelEquipped);
 					function returnThreshold(ilvl){
 						if (ilvl >= $scope.iLvlThreshold) {

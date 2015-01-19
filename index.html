@@ -163,7 +163,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="character in characters | orderBy: orderByField : reverseSort | filter:searchRoster">
-						<td class="color-c{{character.class}} name"><a href="http://us.battle.net/wow/en/character/{{characterRealm}}/{{character.name}}/simple">{{character.name}}</a></td>
+						<td class="color-c{{character.class}} name"><a href="http://{{region}}.battle.net/wow/en/character/{{characterRealm}}/{{character.name}}/simple">{{character.name}}</a></td>
 						<td>{{character.primarySpec}}, {{character.secondarySpec}}</td>
 						<td class="{{character.ilevelThreshold}}">{{character.items.averageItemLevelEquipped}}</td>
 						<td class="{{character.maxRingThreshold}}">{{character.maxRing}}</td>
