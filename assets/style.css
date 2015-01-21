@@ -113,6 +113,15 @@ table tbody tr {
   color: black;
 }
 
+.remove-character {
+  visibility: hidden;
+  color: red;
+  cursor: pointer;
+}
+.name:hover .remove-character {
+  visibility: visible;
+}
+
 .gift:before,
 .breath:before,
 .none:before {

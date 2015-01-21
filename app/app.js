@@ -140,12 +140,28 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 						}
 					}
 					data.maxRing = Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
-					console.log(data.maxRing);
 					if (!data.items.offHand) {
 						data.items.offHand = "";
 						data.items.offHand.itemLevel = "";
 						data.items.offHand.quality = "";
 					}
+					var killsforRaidId = function(raid_id){
+						var normal = 0,
+						heroic = 0,
+						mythic = 0;
+
+						data.progression.raids[raid_id].bosses.forEach(function(boss){
+							normal += boss.normalKills
+							heroic += boss.heroicKills
+							mythic += boss.mythicKills
+						})
+						return [normal, heroic, mythic]
+					}
+
+				var highmaul = killsforRaidId(32);
+				data.highmaulNormal = highmaul[0];
+				data.highmaulHeroic = highmaul[1];
+				data.highmaulMythic = highmaul[2];
 
 				$scope.characters.push(data);
 				console.log(data);

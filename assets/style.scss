@@ -31,6 +31,13 @@ table tbody tr { counter-increment: rowNumber; }
 
 .name a, .name a:hover { color: black; }
 
+.remove-character {
+	visibility: hidden;
+	color: red;
+	cursor: pointer;
+	.name:hover  & { visibility: visible; }
+}
+
 .gift:before,
 .breath:before,
 .none:before {
