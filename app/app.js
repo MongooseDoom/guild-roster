@@ -5,7 +5,9 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	/* Guild Info */
 		$scope.guildName = "Shirley Templars";
 		$scope.guildRealm = "Tichondrius";
-		$scope.region = "us"; /* http://blizzard.github.io/api-wow-docs/#localization */
+		/* http://blizzard.github.io/api-wow-docs/#localization */
+		$scope.regionHost = "us.battle.net";
+		$scope.regionLocale = "en_US";
 
 	/* Member Info */
 		$scope.guildMembers = [
@@ -53,7 +55,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	* Gets all US WoW Realms
 	*/
 	$scope.getRealms = function(){
-		$http.jsonp('http://'+$scope.region+'.battle.net/api/wow/realm/status?jsonp=JSON_CALLBACK').success(function(data, status, headers, config) {
+		$http.jsonp("http://"+$scope.regionHost+"/api/wow/realm/status?locale="+$scope.regionLocale+"&jsonp=JSON_CALLBACK").success(function(data, status, headers, config) {
 			data.realms.map(function(item){
 				$scope.realms.push(item.name);
 			});
@@ -93,7 +95,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	* @param {string} realm - The name of the character's realm
 	*/
 	$scope.addCharacter = function(character, realm){
-		$http.jsonp("http://"$scope.region".battle.net/api/wow/character/"+realm+"/"+character+"?fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
+		$http.jsonp("http://"+$scope.regionHost+"/api/wow/character/"+realm+"/"+character+"?locale="+$scope.regionLocale+"&fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
 					data.ilevelThreshold = returnThreshold(data.items.averageItemLevelEquipped);
 					function returnThreshold(ilvl){
 						if (ilvl >= $scope.iLvlThreshold) {
@@ -120,11 +122,10 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 
 	/**
 	* Removes a character
-	* @param {string} character - The name of the character
-	* @param {string} realm - The name of the character's realm
+	* @param {number} index - The index of the character in $scope.characters
 	*/
-	$scope.removeCharacter = function(character, realm){
-		$scope.characters.splice($scope.characters.indexOf(name), 1);
+	$scope.removeCharacter = function(index){
+		$scope.characters.splice(index, 1);
 	}; /* end removeCharacter() */
 
 	/**
