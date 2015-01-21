@@ -8,6 +8,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		/* http://blizzard.github.io/api-wow-docs/#localization */
 		$scope.regionHost = "us.battle.net";
 		$scope.regionLocale = "en_US";
+		$scope.guildList = 'raid';
 
 	/* Member Info */
 		$scope.guildMembers = [
@@ -37,13 +38,17 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 
 	/* General Info */
 		$scope.errorText = '';
+		$scope.raid = 'HM';
 
 		/* sort */
-		$scope.orderByField = 'ilevel';
+		$scope.orderByField = 'items.averageItemLevelEquipped';
 		$scope.reverseSort = true;
 
 		/* ilvl thresholds */
-		$scope.iLvlThreshold = 625;
+		$scope.iLvlHM = 625;
+		$scope.iLvlBRF = 655;
+
+		$scope.iLvlThreshold = $scope.iLvlHM;
 		$scope.ringThreshold = 680;
 
 		/* forms */
@@ -63,6 +68,36 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			$scope.errorText = "Can not get realms";
 		});
 	} /* end getRealms() */
+
+	/**
+	* Creates character list
+	* @param {array} characters - Array of character names
+	*/
+	$scope.createCharacterList = function(characters){
+		$scope.characters = [];
+		if (characters) {
+			angular.forEach($scope.guildMembers, function(member, index) {
+				$scope.addCharacter(member.name, $scope.guildRealm);
+			});
+		} else {
+			$scope.getGuildList();
+		}
+	}; /* end createCharacterList() */
+
+	/**
+	* Creates character list based on all guild members over lvl 100
+	*/
+	$scope.getGuildList = function(){
+		$http.jsonp("http://"+$scope.regionHost+"/api/wow/guild/"+$scope.guildRealm+"/"+$scope.guildName+"?fields=members&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
+			angular.forEach(data.members, function (member, index) {
+				if (member.character.level >= 100) {
+					$scope.addCharacter(member.character.name, $scope.guildRealm);
+				}
+			});
+		}).error(function(data, status, hearders, config){
+			$scope.errorText = "Can not load guild";
+		}); // end jsonp()
+	}; /* end getGuildList() */
 
 	/**
 	* Checks item for enchant
@@ -104,9 +139,8 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 							return "danger";
 						}
 					}
-					data.maxRing = function(){
-						return Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
-					}
+					data.maxRing = Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
+					console.log(data.maxRing);
 					if (!data.items.offHand) {
 						data.items.offHand = "";
 						data.items.offHand.itemLevel = "";
@@ -128,13 +162,12 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		$scope.characters.splice(index, 1);
 	}; /* end removeCharacter() */
 
+
 	/**
 	* Start this shit
 	*/
 	$scope.getRealms();
-	angular.forEach($scope.guildMembers, function(member, index) {
-		$scope.addCharacter(member.name, $scope.guildRealm);
-	});
+	$scope.createCharacterList($scope.guildMembers);
 
 
 }); /* end app.controller */

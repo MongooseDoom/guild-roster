@@ -35,6 +35,15 @@
 						<input type="text" class="form-control" placeholder="Search Roster" ng-model="searchRoster">
 					</div>
 				</form>
+				<div class="btn-group navbar-form" role="group">
+					<button type="button" class="btn btn-default" ng-class="{'active': guildList == 'raid'}" ng-click="createCharacterList(guildMembers); guildList = 'raid'">Raid Team</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': guildList == 'guild'}" ng-click="createCharacterList(); guildList = 'guild'">Guild</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': guildList == 'custom'}" ng-click="characters = []; guildList = 'custom'">Custom</button>
+				</div>
+				<div class="btn-group navbar-form" role="group">
+					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'HM'}" ng-click="raid = 'HM'; iLvlThreshold = iLvlHM">Highmaul</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'BRF'}" ng-click="raid = 'BRF'; iLvlThreshold = iLvlBRF">Blackrock Foundry</button>
+				</div>
 			</nav>
 			<div ng-show="errorText" class="alert alert-danger" role="alert">
 				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -54,108 +63,108 @@
 							<span ng-show="orderByField == 'primarySpec' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'primarySpec' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='ilevel'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.averageItemLevelEquipped'; reverseSort = !reverseSort">
 							iLevel
-							<span ng-show="orderByField == 'ilevel' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'ilevel' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.averageItemLevelEquipped' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.averageItemLevelEquipped' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
 						<th ng-click="orderByField='maxRing'; reverseSort = !reverseSort">
 							Ring
 							<span ng-show="orderByField == 'maxRing' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'maxRing' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='head'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.head.itemLevel'; reverseSort = !reverseSort">
 							Head
-							<span ng-show="orderByField == 'head' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'head' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.head.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.head.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='neck'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.neck.itemLevel'; reverseSort = !reverseSort">
 							Neck
-							<span ng-show="orderByField == 'neck' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'neck' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.neck.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.neck.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='shoulder'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.shoulder.itemLevel'; reverseSort = !reverseSort">
 							Shoulder
-							<span ng-show="orderByField == 'shoulder' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'shoulder' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.shoulder.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.shoulder.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='back'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.back.itemLevel'; reverseSort = !reverseSort">
 							Back
-							<span ng-show="orderByField == 'back' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'back' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.back.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.back.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='chest'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.chest.itemLevel'; reverseSort = !reverseSort">
 							Chest
-							<span ng-show="orderByField == 'chest' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'chest' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.chest.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.chest.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='wrist'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.wrist.itemLevel'; reverseSort = !reverseSort">
 							Wrist
-							<span ng-show="orderByField == 'wrist' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'wrist' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.wrist.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.wrist.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='hands'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.hands.itemLevel'; reverseSort = !reverseSort">
 							Hands
-							<span ng-show="orderByField == 'hands' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'hands' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.hands.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.hands.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='waist'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.waist.itemLevel'; reverseSort = !reverseSort">
 							Waist
-							<span ng-show="orderByField == 'waist' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'waist' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.waist.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.waist.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='legs'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.legs.itemLevel'; reverseSort = !reverseSort">
 							Legs
-							<span ng-show="orderByField == 'legs' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'legs' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.legs.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.legs.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='feet'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.feet.itemLevel'; reverseSort = !reverseSort">
 							Feet
-							<span ng-show="orderByField == 'feet' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'feet' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.feet.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.feet.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='ring1'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.finger1.itemLevel'; reverseSort = !reverseSort">
 							Ring
-							<span ng-show="orderByField == 'ring1' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'ring1' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.finger1.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.finger1.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='ring2'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.finger2.itemLevel'; reverseSort = !reverseSort">
 							Ring
-							<span ng-show="orderByField == 'ring2' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'ring2' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.finger2.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.finger2.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='trinket1'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.trinket1.itemLevel'; reverseSort = !reverseSort">
 							Trinket
-							<span ng-show="orderByField == 'trinket1' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'trinket1' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.trinket1.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.trinket1.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='trinket2'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.trinket2.itemLevel'; reverseSort = !reverseSort">
 							Trinket
-							<span ng-show="orderByField == 'trinket2' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'trinket2' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.trinket2.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.trinket2.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='mh'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.mainHand.itemLevel'; reverseSort = !reverseSort">
 							MH
-							<span ng-show="orderByField == 'mh' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'mh' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.mainHand.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.mainHand.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='oh'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.offHand.itemLevel'; reverseSort = !reverseSort">
 							OH
-							<span ng-show="orderByField == 'oh' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'oh' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.offHand.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.offHand.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
 	          			<th ng-click="orderByField='highmaulNormal'; reverseSort = !reverseSort">
-	          				N HM
+	          				N {{raid}}
 	          				<span ng-show="orderByField == 'highmaulNormal' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'highmaulNormal' && reverseSort" class="fa fa-caret-up"></span>
 	          			</th>
 	          			<th ng-click="orderByField='highmaulHeroic'; reverseSort = !reverseSort">
-	          				H HM
+	          				H {{raid}}
 	          				<span ng-show="orderByField == 'highmaulHeroic' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'highmaulHeroic' && reverseSort" class="fa fa-caret-up"></span>
 	          			</th>
 	          			<th ng-click="orderByField='highmaulMythic'; reverseSort = !reverseSort">
-	          				M HM
+	          				M {{raid}}
 	          				<span ng-show="orderByField == 'highmaulMythic' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'highmaulMythic' && reverseSort" class="fa fa-caret-up"></span>
 	          			</th>
@@ -163,7 +172,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="character in characters | orderBy: orderByField : reverseSort | filter:searchRoster">
-						<td class="color-c{{character.class}} name"><a href="http://{{region}}.battle.net/wow/en/character/{{characterRealm}}/{{character.name}}/simple">{{character.name}}</a><button class="btn btn-danger pull-right" ng-click="removeCharacter($index)" aria-label="Remove">X</button></td>
+						<td class="color-c{{character.class}} name"><a href="http://{{region}}.battle.net/wow/en/character/{{characterRealm}}/{{character.name}}/simple">{{character.name}}</a><div class="pull-right" ng-click="removeCharacter($index)" aria-label="Remove">X</div></td>
 						<td>{{character.primarySpec}}, {{character.secondarySpec}}</td>
 						<td class="{{character.ilevelThreshold}}">{{character.items.averageItemLevelEquipped}}</td>
 						<td class="{{character.maxRingThreshold}}">{{character.maxRing}}</td>
@@ -182,7 +191,7 @@
 						<td ng-class="{'danger': (character.items.trinket1.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.trinket1.quality}}"><a href="http://www.wowhead.com/item={{character.items.trinket1.id}}" rel="item={{character.items.trinket1.id}}">{{character.items.trinket1.itemLevel}}</a></td>
 						<td ng-class="{'danger': (character.items.trinket2.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.trinket2.quality}}"><a href="http://www.wowhead.com/item={{character.items.trinket2.id}}" rel="item={{character.items.trinket2.id}}">{{character.items.trinket2.itemLevel}}</a></td>
 						<td ng-class="{'danger': (character.items.mainHand.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.mainHand.quality}} {{getEnchant(character.items.mainHand)}}"><a href="http://www.wowhead.com/item={{character.items.mainHand.id}}" rel="item={{character.items.mainHand.id}}">{{character.items.mainHand.itemLevel}}</a></td>
-						<td ng-class="{'danger': (character.items.offHand.itemLevel && character.oh <= iLvlThreshold)}" class="color-q{{character.ohQuality}}"><a href="http://www.wowhead.com/item={{character.ohId}}" rel="item={{character.ohId}}">{{character.items.offHand.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.offHand.itemLevel && character.items.offHand <= iLvlThreshold)}" class="color-q{{character.items.offHand.quality}}"><a href="http://www.wowhead.com/item={{character.items.offHand.id}}" rel="item={{character.items.offHand.id}}">{{character.items.offHand.itemLevel}}</a></td>
 						<td>{{character.highmaulNormal}}</td>
 						<td>{{character.highmaulHeroic}}</td>
 						<td>{{character.highmaulMythic}}</td>
@@ -192,7 +201,7 @@
 		</div>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
-		<script type="text/javascript" src="app/typeahead.js"></script>
+		<script type="text/javascript" src="app/ui-bootstrap.js"></script>
 		<script type="text/javascript" src="app/app.js"></script>
 		<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>
 	</body>
