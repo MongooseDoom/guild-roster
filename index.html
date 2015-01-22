@@ -192,9 +192,18 @@
 						<td ng-class="{'danger': (character.items.trinket2.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.trinket2.quality}}"><a href="http://www.wowhead.com/item={{character.items.trinket2.id}}" rel="item={{character.items.trinket2.id}}">{{character.items.trinket2.itemLevel}}</a></td>
 						<td ng-class="{'danger': (character.items.mainHand.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.mainHand.quality}} {{getEnchant(character.items.mainHand)}}"><a href="http://www.wowhead.com/item={{character.items.mainHand.id}}" rel="item={{character.items.mainHand.id}}">{{character.items.mainHand.itemLevel}}</a></td>
 						<td ng-class="{'danger': (character.items.offHand.itemLevel && character.items.offHand <= iLvlThreshold)}" class="color-q{{character.items.offHand.quality}}"><a href="http://www.wowhead.com/item={{character.items.offHand.id}}" rel="item={{character.items.offHand.id}}">{{character.items.offHand.itemLevel}}</a></td>
-						<td>{{character.highmaulNormal}}</td>
-						<td>{{character.highmaulHeroic}}</td>
-						<td>{{character.highmaulMythic}}</td>
+						<td>
+							<span ng-show="raid == 'HM'">{{character.highmaulNormal}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brfNormal}}</span>
+						</td>
+						<td>
+							<span ng-show="raid == 'HM'">{{character.highmaulHeroic}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brfHeroic}}</span>
+						</td>
+						<td>
+							<span ng-show="raid == 'HM'">{{character.highmaulMythic}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brfMythic}}</span>
+						</td>
 					</tr>
 				</tbody>
 			</table>

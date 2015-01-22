@@ -162,6 +162,11 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 				data.highmaulHeroic = highmaul[1];
 				data.highmaulMythic = highmaul[2];
 
+				var brf = killsforRaidId(33);
+      			data.brfNormal = brf[0];
+      			data.brfHeroic = brf[1];
+      			data.brfMythic = brf[2];
+
 				$scope.characters.push(data);
 				console.log(data);
 		}).error(function(data, status, hearders, config){
