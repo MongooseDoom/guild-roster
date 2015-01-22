@@ -130,33 +130,29 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	*/
 	$scope.addCharacter = function(character, realm){
 		$http.jsonp("http://"+$scope.regionHost+"/api/wow/character/"+realm+"/"+character+"?locale="+$scope.regionLocale+"&fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
-					data.ilevelThreshold = returnThreshold(data.items.averageItemLevelEquipped);
-					function returnThreshold(ilvl){
-						if (ilvl >= $scope.iLvlThreshold) {
-							return "success";
-						} else {
-							return "danger";
-						}
-					}
-					data.maxRing = Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
-					if (!data.items.offHand) {
-						data.items.offHand = "";
-						data.items.offHand.itemLevel = "";
-						data.items.offHand.quality = "";
-					}
-					var killsforRaidId = function(raid_id){
-						var normal = 0,
-						heroic = 0,
-						mythic = 0;
 
-						data.progression.raids[raid_id].bosses.forEach(function(boss){
-							normal += boss.normalKills
-							heroic += boss.heroicKills
-							mythic += boss.mythicKills
-						})
-						return [normal, heroic, mythic]
-					}
+				var killsforRaidId = function(raid_id){
+					var normal = 0,
+					heroic = 0,
+					mythic = 0;
 
+					data.progression.raids[raid_id].bosses.forEach(function(boss){
+						normal += boss.normalKills
+						heroic += boss.heroicKills
+						mythic += boss.mythicKills
+					})
+					return [normal, heroic, mythic]
+				}
+
+				/* Extra character data for chart */
+				data.maxRing = Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
+				if (!data.items.offHand) {
+					data.items.offHand = "";
+					data.items.offHand.itemLevel = "";
+					data.items.offHand.quality = "";
+				}
+
+				/* Raid kills */
 				var highmaul = killsforRaidId(32);
 				data.highmaulNormal = highmaul[0];
 				data.highmaulHeroic = highmaul[1];
@@ -167,8 +163,8 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
       			data.brfHeroic = brf[1];
       			data.brfMythic = brf[2];
 
+      			/* Add to characters */
 				$scope.characters.push(data);
-				console.log(data);
 		}).error(function(data, status, hearders, config){
     			$scope.errorText = "Can not get character";
     	}); // end jsonp()
