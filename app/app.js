@@ -174,8 +174,11 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	* Removes a character
 	* @param {number} index - The index of the character in $scope.characters
 	*/
-	$scope.removeCharacter = function(index){
-		$scope.characters.splice(index, 1);
+	$scope.removeCharacter = function(character){
+		var index = $scope.characters.indexOf(character);
+		if (index != -1) {
+			$scope.characters.splice(index, 1);
+		}
 	}; /* end removeCharacter() */
 
 
