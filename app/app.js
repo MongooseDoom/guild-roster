@@ -1,4 +1,4 @@
-var app = angular.module('guildRosterApp', ['ui.bootstrap']);
+var app = angular.module('guildRosterApp', ['ui.bootstrap', 'angular-loading-bar']);
 
 app.controller('guildRosterCtrl', function ($scope, $http) {
 
