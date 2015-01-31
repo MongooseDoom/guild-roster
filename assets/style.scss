@@ -1,3 +1,7 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 .table tbody tr td:first-child::before {
     content: counter(rowNumber);
     min-width: 1em;
@@ -30,6 +34,13 @@ table tbody tr { counter-increment: rowNumber; }
 	.color-q7, .color-q7 a { color: #e5cc80 !important; } /* heirloom (gold) */
 
 .name a, .name a:hover { color: black; }
+
+.remove-character {
+	visibility: hidden;
+	color: red;
+	cursor: pointer;
+	.name:hover  & { visibility: visible; }
+}
 
 .gift:before,
 .breath:before,

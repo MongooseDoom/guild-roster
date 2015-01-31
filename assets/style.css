@@ -1,3 +1,7 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 .table tbody tr td:first-child::before {
   content: counter(rowNumber);
   min-width: 1em;
@@ -113,6 +117,15 @@ table tbody tr {
   color: black;
 }
 
+.remove-character {
+  visibility: hidden;
+  color: red;
+  cursor: pointer;
+}
+.name:hover .remove-character {
+  visibility: visible;
+}
+
 .gift:before,
 .breath:before,
 .none:before {
@@ -135,5 +148,3 @@ table tbody tr {
 .none:before {
   background: #ce8383;
 }
-
-/*# sourceMappingURL=style.css.map */

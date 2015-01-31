@@ -14,20 +14,20 @@
 		<link rel="stylesheet" href="assets/style.css">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     </head>
-	<body ng-app="shirleyTemplarsApp">
-		<div ng-controller="armoryCtrl">
+	<body ng-app="guildRosterApp">
+		<div ng-controller="guildRosterCtrl">
 			<nav class="navbar navbar-default">
-				<span class="navbar-brand">{{toonGuild}}</span>
-				<span class="navbar-text">{{toonRealm}}</span>
+				<span class="navbar-brand">Shirley Templars</span>
+				<span class="navbar-text">Tichondrius</span>
 				<form class="navbar-form navbar-left">
 					<div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-user"></i></div>
-						<input type="text" class="form-control" placeholder="Name" ng-model="formToon">
+						<input type="text" class="form-control" placeholder="Name" ng-model="formcharacter">
 					</div>
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="Realm" typeahead="name for name in realms | filter:$viewValue | limitTo:8" ng-model="formRealm">
 					</div>
-					<button type="submit" class="btn btn-default" ng-click="addToon()">Add</button>
+					<button type="submit" class="btn btn-default" ng-click="addCharacter(formcharacter,formRealm)">Add</button>
 				</form>
 				<form class="navbar-form navbar-left" Role="search">
 					<div class="input-group">
@@ -35,8 +35,22 @@
 						<input type="text" class="form-control" placeholder="Search Roster" ng-model="searchRoster">
 					</div>
 				</form>
+				<div class="btn-group navbar-form" role="group">
+					<button type="button" class="btn btn-default" ng-class="{'active': guildList == 'raid'}" ng-click="createCharacterList(guildMembers); guildList = 'raid'">Raid Team</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': guildList == 'guild'}" ng-click="createCharacterList(); guildList = 'guild'">Guild</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': guildList == 'custom'}" ng-click="characters = []; guildList = 'custom'">Custom</button>
+				</div>
+				<div class="btn-group navbar-form" role="group">
+					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'HM'}" ng-click="raid = 'HM'; iLvlThreshold = iLvlHM">Highmaul</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'BRF'}" ng-click="raid = 'BRF'; iLvlThreshold = iLvlBRF">Blackrock Foundry</button>
+				</div>
 			</nav>
-			<table class="table table-hover">
+			<div ng-cloak ng-show="errorText" class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{errorText}}
+			</div>
+			<table ng-cloak class="table table-hover">
 				<thead>
 					<tr>
 						<th ng-click="orderByField='name'; reverseSort = !reverseSort">
@@ -49,145 +63,154 @@
 							<span ng-show="orderByField == 'primarySpec' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'primarySpec' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='ilevel'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.averageItemLevelEquipped'; reverseSort = !reverseSort">
 							iLevel
-							<span ng-show="orderByField == 'ilevel' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'ilevel' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.averageItemLevelEquipped' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.averageItemLevelEquipped' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
 						<th ng-click="orderByField='maxRing'; reverseSort = !reverseSort">
 							Ring
 							<span ng-show="orderByField == 'maxRing' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'maxRing' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='head'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.head.itemLevel'; reverseSort = !reverseSort">
 							Head
-							<span ng-show="orderByField == 'head' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'head' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.head.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.head.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='neck'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.neck.itemLevel'; reverseSort = !reverseSort">
 							Neck
-							<span ng-show="orderByField == 'neck' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'neck' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.neck.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.neck.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='shoulder'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.shoulder.itemLevel'; reverseSort = !reverseSort">
 							Shoulder
-							<span ng-show="orderByField == 'shoulder' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'shoulder' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.shoulder.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.shoulder.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='back'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.back.itemLevel'; reverseSort = !reverseSort">
 							Back
-							<span ng-show="orderByField == 'back' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'back' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.back.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.back.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='chest'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.chest.itemLevel'; reverseSort = !reverseSort">
 							Chest
-							<span ng-show="orderByField == 'chest' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'chest' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.chest.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.chest.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='wrist'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.wrist.itemLevel'; reverseSort = !reverseSort">
 							Wrist
-							<span ng-show="orderByField == 'wrist' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'wrist' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.wrist.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.wrist.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='hands'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.hands.itemLevel'; reverseSort = !reverseSort">
 							Hands
-							<span ng-show="orderByField == 'hands' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'hands' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.hands.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.hands.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='waist'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.waist.itemLevel'; reverseSort = !reverseSort">
 							Waist
-							<span ng-show="orderByField == 'waist' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'waist' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.waist.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.waist.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='legs'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.legs.itemLevel'; reverseSort = !reverseSort">
 							Legs
-							<span ng-show="orderByField == 'legs' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'legs' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.legs.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.legs.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='feet'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.feet.itemLevel'; reverseSort = !reverseSort">
 							Feet
-							<span ng-show="orderByField == 'feet' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'feet' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.feet.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.feet.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='ring1'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.finger1.itemLevel'; reverseSort = !reverseSort">
 							Ring
-							<span ng-show="orderByField == 'ring1' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'ring1' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.finger1.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.finger1.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='ring2'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.finger2.itemLevel'; reverseSort = !reverseSort">
 							Ring
-							<span ng-show="orderByField == 'ring2' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'ring2' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.finger2.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.finger2.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='trinket1'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.trinket1.itemLevel'; reverseSort = !reverseSort">
 							Trinket
-							<span ng-show="orderByField == 'trinket1' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'trinket1' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.trinket1.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.trinket1.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='trinket2'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.trinket2.itemLevel'; reverseSort = !reverseSort">
 							Trinket
-							<span ng-show="orderByField == 'trinket2' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'trinket2' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.trinket2.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.trinket2.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='mh'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.mainHand.itemLevel'; reverseSort = !reverseSort">
 							MH
-							<span ng-show="orderByField == 'mh' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'mh' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.mainHand.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.mainHand.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
-						<th ng-click="orderByField='oh'; reverseSort = !reverseSort">
+						<th ng-click="orderByField='items.offHand.itemLevel'; reverseSort = !reverseSort">
 							OH
-							<span ng-show="orderByField == 'oh' && !reverseSort" class="fa fa-caret-down"></span>
-        					<span ng-show="orderByField == 'oh' && reverseSort" class="fa fa-caret-up"></span>
+							<span ng-show="orderByField == 'items.offHand.itemLevel' && !reverseSort" class="fa fa-caret-down"></span>
+        					<span ng-show="orderByField == 'items.offHand.itemLevel' && reverseSort" class="fa fa-caret-up"></span>
 						</th>
 	          			<th ng-click="orderByField='highmaulNormal'; reverseSort = !reverseSort">
-	          				N HM
+	          				N {{raid}}
 	          				<span ng-show="orderByField == 'highmaulNormal' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'highmaulNormal' && reverseSort" class="fa fa-caret-up"></span>
 	          			</th>
 	          			<th ng-click="orderByField='highmaulHeroic'; reverseSort = !reverseSort">
-	          				H HM
+	          				H {{raid}}
 	          				<span ng-show="orderByField == 'highmaulHeroic' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'highmaulHeroic' && reverseSort" class="fa fa-caret-up"></span>
 	          			</th>
 	          			<th ng-click="orderByField='highmaulMythic'; reverseSort = !reverseSort">
-	          				M HM
+	          				M {{raid}}
 	          				<span ng-show="orderByField == 'highmaulMythic' && !reverseSort" class="fa fa-caret-down"></span>
         					<span ng-show="orderByField == 'highmaulMythic' && reverseSort" class="fa fa-caret-up"></span>
 	          			</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="toon in toons | orderBy: orderByField : reverseSort | filter:searchRoster">
-						<td class="color-c{{toon.class}} name"><a href="http://us.battle.net/wow/en/character/{{toonRealm}}/{{toon.name}}/simple">{{toon.name}}</a></td>
-						<td>{{toon.primarySpec}}, {{toon.secondarySpec}}</td>
-						<td class="{{toon.ilevelThreshold}}">{{toon.ilevel}}</td>
-						<td class="{{toon.maxRingThreshold}}">{{toon.maxRing}}</td>
-						<td ng-class="{'danger': (toon.head <= iLvlThreshold)}" class="color-q{{toon.headQuality}}"><a href="http://www.wowhead.com/item={{toon.headId}}" rel="item={{toon.headId}}">{{toon.head}}</a></td>
-						<td ng-class="{'danger': (toon.neck <= iLvlThreshold)}" class="color-q{{toon.neckQuality}} {{toon.neckEnchant}}"><a href="http://www.wowhead.com/item={{toon.neckId}}" rel="item={{toon.neckId}}">{{toon.neck}}</a></td>
-						<td ng-class="{'danger': (toon.shoulder <= iLvlThreshold)}" class="color-q{{toon.shoulderQuality}}"><a href="http://www.wowhead.com/item={{toon.shoulderId}}" rel="item={{toon.shoulderId}}">{{toon.shoulder}}</a></td>
-						<td ng-class="{'danger': (toon.back <= iLvlThreshold)}" class="color-q{{toon.backQuality}} {{toon.backEnchant}}"><a href="http://www.wowhead.com/item={{toon.backId}}" rel="item={{toon.backId}}">{{toon.back}}</a></td>
-						<td ng-class="{'danger': (toon.chest <= iLvlThreshold)}" class="color-q{{toon.chestQuality}}"><a href="http://www.wowhead.com/item={{toon.chestId}}" rel="item={{toon.chestId}}">{{toon.chest}}</a></td>
-						<td ng-class="{'danger': (toon.wrist <= iLvlThreshold)}" class="color-q{{toon.wristQuality}}"><a href="http://www.wowhead.com/item={{toon.wristId}}" rel="item={{toon.wristId}}">{{toon.wrist}}</a></td>
-						<td ng-class="{'danger': (toon.hands <= iLvlThreshold)}" class="color-q{{toon.handsQuality}}"><a href="http://www.wowhead.com/item={{toon.handsId}}" rel="item={{toon.handsId}}">{{toon.hands}}</a></td>
-						<td ng-class="{'danger': (toon.waist <= iLvlThreshold)}" class="color-q{{toon.waistQuality}}"><a href="http://www.wowhead.com/item={{toon.waistId}}" rel="item={{toon.waistId}}">{{toon.waist}}</a></td>
-						<td ng-class="{'danger': (toon.legs <= iLvlThreshold)}" class="color-q{{toon.legsQuality}}"><a href="http://www.wowhead.com/item={{toon.legsId}}" rel="item={{toon.legsId}}">{{toon.legs}}</a></td>
-						<td ng-class="{'danger': (toon.feet <= iLvlThreshold)}" class="color-q{{toon.feetQuality}}"><a href="http://www.wowhead.com/item={{toon.feetId}}" rel="item={{toon.feetId}}">{{toon.feet}}</a></td>
-						<td ng-class="{'danger': (toon.ring1 <= iLvlThreshold)}" class="color-q{{toon.ring1Quality}} {{toon.ring1Enchant}}"><a href="http://www.wowhead.com/item={{toon.ring1Id}}" rel="item={{toon.ring1Id}}">{{toon.ring1}}</a></td>
-						<td ng-class="{'danger': (toon.ring2 <= iLvlThreshold)}" class="color-q{{toon.ring2Quality}} {{toon.ring2Enchant}}"><a href="http://www.wowhead.com/item={{toon.ring2Id}}" rel="item={{toon.ring2Id}}">{{toon.ring2}}</a></td>
-						<td ng-class="{'danger': (toon.trinket1 <= iLvlThreshold)}" class="color-q{{toon.trinket1Quality}}"><a href="http://www.wowhead.com/item={{toon.trinket1Id}}" rel="item={{toon.trinket1Id}}">{{toon.trinket1}}</a></td>
-						<td ng-class="{'danger': (toon.trinket2 <= iLvlThreshold)}" class="color-q{{toon.trinket2Quality}}"><a href="http://www.wowhead.com/item={{toon.trinket2Id}}" rel="item={{toon.trinket2Id}}">{{toon.trinket2}}</a></td>
-						<td ng-class="{'danger': (toon.mh <= iLvlThreshold)}" class="color-q{{toon.mhQuality}} {{toon.mhEnchant}}"><a href="http://www.wowhead.com/item={{toon.mhId}}" rel="item={{toon.mhId}}">{{toon.mh}}</a></td>
-						<td ng-class="{'danger': (toon.oh && toon.oh <= iLvlThreshold)}" class="color-q{{toon.ohQuality}}"><a href="http://www.wowhead.com/item={{toon.ohId}}" rel="item={{toon.ohId}}">{{toon.oh}}</a></td>
-						<td>{{toon.highmaulNormal}}</td>
-						<td>{{toon.highmaulHeroic}}</td>
-						<td>{{toon.highmaulMythic}}</td>
+					<tr ng-repeat="character in characters | orderBy: orderByField : reverseSort | filter:searchRoster">
+						<td class="color-c{{character.class}} name"><a href="http://{{region}}.battle.net/wow/en/character/{{characterRealm}}/{{character.name}}/simple">{{character.name}}</a><div class="pull-right remove-character" ng-click="removeCharacter($index)" aria-label="Remove"><i class="glyphicon glyphicon-remove"></i></div></td>
+						<td>{{character.talents[0].spec.role | lowercase}}, {{character.talents[1].spec.role | lowercase}}</td>
+						<td ng-class="{'danger': (character.items.averageItemLevelEquipped < iLvlThreshold), 'success': (character.items.averageItemLevelEquipped >= iLvlThreshold)}">{{character.items.averageItemLevelEquipped}}</td>
+						<td ng-class="{'danger': (character.maxRing < ringThreshold), 'success': (character.maxRing >= ringThreshold)}">{{character.maxRing}}</td>
+						<td ng-class="{'danger': (character.items.head.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.head.quality}}"><a href="http://www.wowhead.com/item={{character.items.head.id}}" rel="item={{character.items.head.id}}">{{character.items.head.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.neck.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.neck.quality}} {{getEnchant(character.items.neck)}}"><a href="http://www.wowhead.com/item={{character.items.neck.id}}" rel="item={{character.items.neck.id}}">{{character.items.neck.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.shoulder.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.shoulder.quality}}"><a href="http://www.wowhead.com/item={{character.items.shoulder.id}}" rel="item={{character.items.shoulder.id}}">{{character.items.shoulder.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.back.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.back.quality}} {{getEnchant(character.items.back)}}"><a href="http://www.wowhead.com/item={{character.items.back.id}}" rel="item={{character.items.back.id}}">{{character.items.back.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.chest.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.chest.quality}}"><a href="http://www.wowhead.com/item={{character.items.chest.id}}" rel="item={{character.items.chest.id}}">{{character.items.chest.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.wrist.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.wrist.quality}}"><a href="http://www.wowhead.com/item={{character.items.wrist.id}}" rel="item={{character.items.wrist.id}}">{{character.items.wrist.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.hands.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.hands.quality}}"><a href="http://www.wowhead.com/item={{character.items.hands.id}}" rel="item={{character.items.hands.id}}">{{character.items.hands.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.waist.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.waist.quality}}"><a href="http://www.wowhead.com/item={{character.items.waist.id}}" rel="item={{character.items.waist.id}}">{{character.items.waist.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.legs.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.legs.quality}}"><a href="http://www.wowhead.com/item={{character.items.legs.id}}" rel="item={{character.items.legs.id}}">{{character.items.legs.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.feet.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.feet.quality}}"><a href="http://www.wowhead.com/item={{character.items.feet.id}}" rel="item={{character.items.feet.id}}">{{character.items.feet.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.finger1.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.finger1.quality}} {{getEnchant(character.items.finger1)}}"><a href="http://www.wowhead.com/item={{character.items.finger1.id}}" rel="item={{character.items.finger1.id}}">{{character.items.finger1.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.finger2.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.finger2.quality}} {{getEnchant(character.items.finger2)}}"><a href="http://www.wowhead.com/item={{character.items.finger2.id}}" rel="item={{character.items.finger2.id}}">{{character.items.finger2.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.trinket1.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.trinket1.quality}}"><a href="http://www.wowhead.com/item={{character.items.trinket1.id}}" rel="item={{character.items.trinket1.id}}">{{character.items.trinket1.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.trinket2.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.trinket2.quality}}"><a href="http://www.wowhead.com/item={{character.items.trinket2.id}}" rel="item={{character.items.trinket2.id}}">{{character.items.trinket2.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.mainHand.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.mainHand.quality}} {{getEnchant(character.items.mainHand)}}"><a href="http://www.wowhead.com/item={{character.items.mainHand.id}}" rel="item={{character.items.mainHand.id}}">{{character.items.mainHand.itemLevel}}</a></td>
+						<td ng-class="{'danger': (character.items.offHand.itemLevel && character.items.offHand <= iLvlThreshold)}" class="color-q{{character.items.offHand.quality}}"><a href="http://www.wowhead.com/item={{character.items.offHand.id}}" rel="item={{character.items.offHand.id}}">{{character.items.offHand.itemLevel}}</a></td>
+						<td>
+							<span ng-show="raid == 'HM'">{{character.highmaulNormal}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brfNormal}}</span>
+						</td>
+						<td>
+							<span ng-show="raid == 'HM'">{{character.highmaulHeroic}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brfHeroic}}</span>
+						</td>
+						<td>
+							<span ng-show="raid == 'HM'">{{character.highmaulMythic}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brfMythic}}</span>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
-		<script type="text/javascript" src="app/typeahead.js"></script>
+		<script type="text/javascript" src="app/ui-bootstrap.js"></script>
 		<script type="text/javascript" src="app/app.js"></script>
 		<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>
 	</body>

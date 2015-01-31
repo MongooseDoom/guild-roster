@@ -1,368 +1,189 @@
-var app = angular.module('shirleyTemplarsApp', ['ui.bootstrap']);
+var app = angular.module('guildRosterApp', ['ui.bootstrap']);
 
-app.controller('armoryCtrl', function ($scope, $http) {
-	$scope.toons = [
-	{name: 'Gankymcstab'},
-	{name: 'Maralina'},
-	{name: 'Kartekk'},
-	{name: 'Tirial'},
-	{name: 'Sunflowers'},
-	{name: 'Alexithymia'},
-	{name: 'Captnamerica'},
-	{name: 'Altrouge'},
-	{name: 'Tilias'},
-	{name: 'Heartgold'},
-	{name: 'Bananacake'},
-	{name: 'Kamihy'},
-	{name: 'Vectron'},
-	{name: 'Memedom'},
-	{name: 'Mavester'},
-	{name: 'Sackotaterz'},
-	{name: 'Wroughtiron'},
-	{name: 'Tatersakk'},
-	{name: 'Faerietta'},
-	{name: 'Flatugen'},
-	{name: 'Saluja'}
-	];
-	$scope.orderByField = 'ilevel';
-	$scope.reverseSort = true;
-	$scope.toonRealm = "Tichondrius";
-	$scope.toonGuild = "Shirley Templars";
-	$scope.iLvlThreshold = 625;
-	$scope.ringThreshold = 680;
-	$scope.formRealm = $scope.toonRealm;
-	$scope.realms = [];
+app.controller('guildRosterCtrl', function ($scope, $http) {
 
-	// Get Realms
-	$http.jsonp('http://us.battle.net/api/wow/realm/status?jsonp=JSON_CALLBACK').success(function(data, status, headers, config) {
-		data.realms.map(function(item){
-			$scope.realms.push(item.name);
+	/* Guild Info */
+		$scope.guildName = "Shirley Templars";
+		$scope.guildRealm = "Tichondrius";
+		/* http://blizzard.github.io/api-wow-docs/#localization */
+		$scope.regionHost = "us.battle.net";
+		$scope.regionLocale = "en_US";
+		$scope.guildList = 'raid';
+
+	/* Member Info */
+		$scope.guildMembers = [
+			{name: 'Gankymcstab'},
+			{name: 'Maralina'},
+			{name: 'Kartekk'},
+			{name: 'Tirial'},
+			{name: 'Sunflowers'},
+			{name: 'Alexithymia'},
+			{name: 'Captnamerica'},
+			{name: 'Altrouge'},
+			{name: 'Tilias'},
+			{name: 'Heartgold'},
+			{name: 'Kamihy'},
+			{name: 'Vectron'},
+			{name: 'Memedom'},
+			{name: 'Mavester'},
+			{name: 'Sackotaterz'},
+			{name: 'Wroughtiron'},
+			{name: 'Tatersakk'},
+			{name: 'Faerietta'},
+			{name: 'Flatugen'},
+			{name: 'Saluja'}
+		];
+		$scope.characters = [];
+
+	/* General Info */
+		$scope.errorText = '';
+		$scope.raid = 'HM';
+
+		/* sort */
+		$scope.orderByField = 'items.averageItemLevelEquipped';
+		$scope.reverseSort = true;
+
+		/* ilvl thresholds */
+		$scope.iLvlHM = 625;
+		$scope.iLvlBRF = 655;
+
+		$scope.iLvlThreshold = $scope.iLvlHM;
+		$scope.ringThreshold = 680;
+
+		/* forms */
+		$scope.formRealm = $scope.guildRealm;
+		$scope.realms = [];
+
+
+	/**
+	* Gets all US WoW Realms
+	*/
+	$scope.getRealms = function(){
+		$http.jsonp("http://"+$scope.regionHost+"/api/wow/realm/status?locale="+$scope.regionLocale+"&jsonp=JSON_CALLBACK").success(function(data, status, headers, config) {
+			data.realms.map(function(item){
+				$scope.realms.push(item.name);
+			});
+		}).error(function(data, status, headers, config) {
+			$scope.errorText = "Can not get realms";
 		});
-	}).error(function(data, status, headers, config) {
+	} /* end getRealms() */
 
-	});
+	/**
+	* Creates character list
+	* @param {array} characters - Array of character names
+	*/
+	$scope.createCharacterList = function(characters){
+		$scope.characters = [];
+		if (characters) {
+			angular.forEach($scope.guildMembers, function(member, index) {
+				$scope.addCharacter(member.name, $scope.guildRealm);
+			});
+		} else {
+			$scope.getGuildList();
+		}
+	}; /* end createCharacterList() */
 
-	$scope.addToon = function(toon, realm){
-		toon = {name: $scope.formToon};
-		realm = $scope.formRealm;
-$http.jsonp("http://us.battle.net/api/wow/character/"+realm+"/"+toon.name+"?fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").
-		success(function(data, status, hearders, config){
-			toon.class = data.class;
-			toon.className = returnClassName(data.class);
-			toon.primarySpec = data.talents[0].spec.role.toLowerCase();
-			toon.secondarySpec = data.talents[1].spec.role.toLowerCase();
-			toon.level = data.level;
-			toon.ilevel = data.items.averageItemLevelEquipped;
-			toon.ilevelThreshold = returnThreshold(toon.ilevel);
-			toon.maxRing = Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
-			toon.maxRingThreshold = returnMaxRing(toon.maxRing);
-
-			var giftindex = [5310, 5317, 5311, 5324, 5318, 5325, 5312, 5319, 5326, 5313, 5320, 5327, 5314, 5321, 5328],
-			breathindex = [5281, 5285, 5284, 5298, 5292, 5297, 5300, 5293, 5299, 5302, 5294, 5301, 5304, 5295, 5303]
-
-			var enchantsByItem = function(item){
-				if (item) {
-					var enchant
-					if (giftindex.indexOf(item.tooltipParams["enchant"]) > -1) {
-						enchant = "gift"
-					} else if (breathindex.indexOf(item.tooltipParams["enchant"]) > -1) {
-						enchant = "breath"
-					} else {
-						enchant = "none"
-					}
+	/**
+	* Creates character list based on all guild members over lvl 100
+	*/
+	$scope.getGuildList = function(){
+		$http.jsonp("http://"+$scope.regionHost+"/api/wow/guild/"+$scope.guildRealm+"/"+$scope.guildName+"?fields=members&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
+			angular.forEach(data.members, function (member, index) {
+				if (member.character.level >= 100) {
+					$scope.addCharacter(member.character.name, $scope.guildRealm);
 				}
-				else { enchant = "none" }
-					return enchant
-			}
+			});
+		}).error(function(data, status, hearders, config){
+			$scope.errorText = "Can not load guild";
+		}); // end jsonp()
+	}; /* end getGuildList() */
 
-			if (data.items.mainHand) {
-				var wepchantID = data.items.mainHand.tooltipParams["enchant"]
-				switch (wepchantID) {
-					case 5336:
-					case 5335:
-					case 5334:
-					case 5331:
-					case 5276:
-					case 5275:
-					case 5383:
-					case 5330:
-					case 5337:
-					case 5384:
-						toon.mhEnchant = "gift"
-						break;
-					default:
-						toon.mhEnchant = "none"
-				}
-				if (data.class == 6) {toon.mhEnchant = "gift"}
-			} else { toon.mhEnchant = "" }
+	/**
+	* Checks item for enchant
+	* @param {object} item - Item with enchant
+	*/
+	$scope.getEnchant = function(item){
+		/* Enchants */
+		var giftindex = [5310, 5317, 5311, 5324, 5318, 5325, 5312, 5319, 5326, 5313, 5320, 5327, 5314, 5321, 5328];
+		var breathindex = [5281, 5285, 5284, 5298, 5292, 5297, 5300, 5293, 5299, 5302, 5294, 5301, 5304, 5295, 5303];
+		var wepchantID = [5336, 5335, 5334, 5331, 5276, 5275, 5383, 5330, 5337, 5384];
 
-			toon.head = data.items.head.itemLevel;
-			toon.headQuality = data.items.head.quality;
-			toon.headId = data.items.head.id;
-
-			toon.neck = data.items.neck.itemLevel;
-			toon.neckQuality = data.items.neck.quality;
-			toon.neckId = data.items.neck.id;
-			toon.neckEnchant = enchantsByItem(data.items.neck);
-
-			toon.shoulder = data.items.shoulder.itemLevel;
-			toon.shoulderQuality = data.items.shoulder.quality;
-			toon.shoulderId = data.items.shoulder.id;
-
-			toon.back = data.items.back.itemLevel;
-			toon.backQuality = data.items.back.quality;
-			toon.backId = data.items.back.id;
-			toon.backEnchant = enchantsByItem(data.items.back);
-
-			toon.chest = data.items.chest.itemLevel;
-			toon.chestQuality = data.items.chest.quality;
-			toon.chestId = data.items.chest.id;
-
-			toon.wrist = data.items.wrist.itemLevel;
-			toon.wristQuality = data.items.wrist.quality;
-			toon.wristId = data.items.wrist.id;
-
-			toon.hands = data.items.hands.itemLevel;
-			toon.handsQuality = data.items.hands.quality;
-			toon.handsId = data.items.hands.id;
-
-			toon.waist = data.items.waist.itemLevel;
-			toon.waistQuality = data.items.waist.quality;
-			toon.waistId = data.items.waist.id;
-
-			toon.legs = data.items.legs.itemLevel;
-			toon.legsQuality = data.items.legs.quality;
-			toon.legsId = data.items.legs.id;
-
-			toon.feet = data.items.feet.itemLevel;
-			toon.feetQuality = data.items.feet.quality;
-			toon.feetId = data.items.feet.id;
-
-			toon.ring1 = data.items.finger1.itemLevel;
-			toon.ring1Quality = data.items.finger1.quality;
-			toon.ring1Id = data.items.finger1.id;
-			toon.ring1Enchant = enchantsByItem(data.items.finger1);
-
-			toon.ring2 = data.items.finger2.itemLevel;
-			toon.ring2Quality = data.items.finger2.quality;
-			toon.ring2Id = data.items.finger2.id;
-			toon.ring2Enchant = enchantsByItem(data.items.finger2);
-
-			toon.trinket1 = data.items.trinket1.itemLevel;
-			toon.trinket1Quality = data.items.trinket1.quality;
-			toon.trinket1Id = data.items.trinket1.id;
-
-			toon.trinket2 = data.items.trinket2.itemLevel;
-			toon.trinket2Quality = data.items.trinket2.quality;
-			toon.trinket2Id = data.items.trinket2.id;
-
-			toon.mh = data.items.mainHand.itemLevel;
-			toon.mhQuality = data.items.mainHand.quality;
-			toon.mhId = data.items.mainHand.id;
-
-			if (data.items.offHand) {
-				toon.oh = data.items.offHand.itemLevel;
-				toon.ohQuality = data.items.offHand.quality;
+		if (item) {
+			var enchant;
+			if (giftindex.indexOf(item.tooltipParams["enchant"]) > -1 || wepchantID.indexOf(item.tooltipParams["enchant"]) > -1) {
+				enchant = "gift";
+			} else if (breathindex.indexOf(item.tooltipParams["enchant"]) > -1) {
+				enchant = "breath";
 			} else {
-				toon.oh = "";
-				toon.ohQuality = "";
+				enchant = "none";
 			}
+		} else {
+			enchant = "none";
+		}
+			return enchant;
+	}  /* end getEnchant() */
 
-			var killsforRaidId = function(raid_id){
-				var normal = 0,
-				heroic = 0,
-				mythic = 0;
+	/**
+	* Adds a character
+	* @param {string} character - The name of the character
+	* @param {string} realm - The name of the character's realm
+	*/
+	$scope.addCharacter = function(character, realm){
+		$http.jsonp("http://"+$scope.regionHost+"/api/wow/character/"+realm+"/"+character+"?locale="+$scope.regionLocale+"&fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
 
-				data.progression.raids[raid_id].bosses.forEach(function(boss){
-					normal += boss.normalKills
-					heroic += boss.heroicKills
-					mythic += boss.mythicKills
-				})
-				return [normal, heroic, mythic]
-			}
+				var killsforRaidId = function(raid_id){
+					var normal = 0,
+					heroic = 0,
+					mythic = 0;
 
-			var highmaul = killsforRaidId(32);
-			toon.highmaulNormal = highmaul[0];
-			toon.highmaulHeroic = highmaul[1];
-			toon.highmaulMythic = highmaul[2];
-
-			$scope.toons.push(toon);
-			$scope.formToon = "";
-
-		}).
-error(function(data, status, hearders, config){
-    			//log error
-    		});
-	}
-
-	angular.forEach($scope.toons, function(toon, index) {
-		$http.jsonp("http://us.battle.net/api/wow/character/"+$scope.toonRealm+"/"+toon.name+"?fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").
-		success(function(data, status, hearders, config){
-			toon.class = data.class;
-			toon.className = returnClassName(data.class);
-			toon.primarySpec = data.talents[0].spec.role.toLowerCase();
-			toon.secondarySpec = data.talents[1].spec.role.toLowerCase();
-			toon.level = data.level;
-			toon.ilevel = data.items.averageItemLevelEquipped;
-			toon.ilevelThreshold = returnThreshold(toon.ilevel);
-			toon.maxRing = Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
-			toon.maxRingThreshold = returnMaxRing(toon.maxRing);
-
-			var giftindex = [5310, 5317, 5311, 5324, 5318, 5325, 5312, 5319, 5326, 5313, 5320, 5327, 5314, 5321, 5328],
-			breathindex = [5281, 5285, 5284, 5298, 5292, 5297, 5300, 5293, 5299, 5302, 5294, 5301, 5304, 5295, 5303]
-
-			var enchantsByItem = function(item){
-				if (item) {
-					var enchant
-					if (giftindex.indexOf(item.tooltipParams["enchant"]) > -1) {
-						enchant = "gift"
-					} else if (breathindex.indexOf(item.tooltipParams["enchant"]) > -1) {
-						enchant = "breath"
-					} else {
-						enchant = "none"
-					}
+					data.progression.raids[raid_id].bosses.forEach(function(boss){
+						normal += boss.normalKills
+						heroic += boss.heroicKills
+						mythic += boss.mythicKills
+					})
+					return [normal, heroic, mythic]
 				}
-				else { enchant = "none" }
-					return enchant
-			}
 
-			if (data.items.mainHand) {
-				var wepchantID = data.items.mainHand.tooltipParams["enchant"]
-				switch (wepchantID) {
-					case 5336:
-					case 5335:
-					case 5334:
-					case 5331:
-					case 5276:
-					case 5275:
-					case 5383:
-					case 5330:
-					case 5337:
-					case 5384:
-						toon.mhEnchant = "gift"
-						break;
-					default:
-						toon.mhEnchant = "none"
+				/* Extra character data for chart */
+				data.maxRing = Math.max(data.items.finger1.itemLevel, data.items.finger2.itemLevel);
+				if (!data.items.offHand) {
+					data.items.offHand = "";
+					data.items.offHand.itemLevel = "";
+					data.items.offHand.quality = "";
 				}
-				if (data.class == 6) {toon.mhEnchant = "gift"}
-			} else { toon.mhEnchant = "" }
 
-			toon.head = data.items.head.itemLevel;
-			toon.headQuality = data.items.head.quality;
-			toon.headId = data.items.head.id;
+				/* Raid kills */
+				var highmaul = killsforRaidId(32);
+				data.highmaulNormal = highmaul[0];
+				data.highmaulHeroic = highmaul[1];
+				data.highmaulMythic = highmaul[2];
 
-			toon.neck = data.items.neck.itemLevel;
-			toon.neckQuality = data.items.neck.quality;
-			toon.neckId = data.items.neck.id;
-			toon.neckEnchant = enchantsByItem(data.items.neck);
+				var brf = killsforRaidId(33);
+      			data.brfNormal = brf[0];
+      			data.brfHeroic = brf[1];
+      			data.brfMythic = brf[2];
 
-			toon.shoulder = data.items.shoulder.itemLevel;
-			toon.shoulderQuality = data.items.shoulder.quality;
-			toon.shoulderId = data.items.shoulder.id;
+      			/* Add to characters */
+				$scope.characters.push(data);
+		}).error(function(data, status, hearders, config){
+    			$scope.errorText = "Can not get character";
+    	}); // end jsonp()
+	}; /* end addCharacter() */
 
-			toon.back = data.items.back.itemLevel;
-			toon.backQuality = data.items.back.quality;
-			toon.backId = data.items.back.id;
-			toon.backEnchant = enchantsByItem(data.items.back);
-
-			toon.chest = data.items.chest.itemLevel;
-			toon.chestQuality = data.items.chest.quality;
-			toon.chestId = data.items.chest.id;
-
-			toon.wrist = data.items.wrist.itemLevel;
-			toon.wristQuality = data.items.wrist.quality;
-			toon.wristId = data.items.wrist.id;
-
-			toon.hands = data.items.hands.itemLevel;
-			toon.handsQuality = data.items.hands.quality;
-			toon.handsId = data.items.hands.id;
-
-			toon.waist = data.items.waist.itemLevel;
-			toon.waistQuality = data.items.waist.quality;
-			toon.waistId = data.items.waist.id;
-
-			toon.legs = data.items.legs.itemLevel;
-			toon.legsQuality = data.items.legs.quality;
-			toon.legsId = data.items.legs.id;
-
-			toon.feet = data.items.feet.itemLevel;
-			toon.feetQuality = data.items.feet.quality;
-			toon.feetId = data.items.feet.id;
-
-			toon.ring1 = data.items.finger1.itemLevel;
-			toon.ring1Quality = data.items.finger1.quality;
-			toon.ring1Id = data.items.finger1.id;
-			toon.ring1Enchant = enchantsByItem(data.items.finger1);
-
-			toon.ring2 = data.items.finger2.itemLevel;
-			toon.ring2Quality = data.items.finger2.quality;
-			toon.ring2Id = data.items.finger2.id;
-			toon.ring2Enchant = enchantsByItem(data.items.finger2);
-
-			toon.trinket1 = data.items.trinket1.itemLevel;
-			toon.trinket1Quality = data.items.trinket1.quality;
-			toon.trinket1Id = data.items.trinket1.id;
-
-			toon.trinket2 = data.items.trinket2.itemLevel;
-			toon.trinket2Quality = data.items.trinket2.quality;
-			toon.trinket2Id = data.items.trinket2.id;
-
-			toon.mh = data.items.mainHand.itemLevel;
-			toon.mhQuality = data.items.mainHand.quality;
-			toon.mhId = data.items.mainHand.id;
-
-			if (data.items.offHand) {
-				toon.oh = data.items.offHand.itemLevel;
-				toon.ohQuality = data.items.offHand.quality;
-			} else {
-				toon.oh = "";
-				toon.ohQuality = "";
-			}
-
-			var killsforRaidId = function(raid_id){
-				var normal = 0,
-				heroic = 0,
-				mythic = 0;
-
-				data.progression.raids[raid_id].bosses.forEach(function(boss){
-					normal += boss.normalKills
-					heroic += boss.heroicKills
-					mythic += boss.mythicKills
-				})
-				return [normal, heroic, mythic]
-			}
-
-			var highmaul = killsforRaidId(32);
-			toon.highmaulNormal = highmaul[0];
-			toon.highmaulHeroic = highmaul[1];
-			toon.highmaulMythic = highmaul[2];
-
-		}).
-error(function(data, status, hearders, config){
-    			//log error
-    		});
-});
+	/**
+	* Removes a character
+	* @param {number} index - The index of the character in $scope.characters
+	*/
+	$scope.removeCharacter = function(index){
+		$scope.characters.splice(index, 1);
+	}; /* end removeCharacter() */
 
 
+	/**
+	* Start this shit
+	*/
+	$scope.getRealms();
+	$scope.createCharacterList($scope.guildMembers);
 
-function returnThreshold(ilvl){
-	if (ilvl >= $scope.iLvlThreshold) {
-		return "success";
-	} else {
-		return "danger";
-	}
-}
 
-function returnMaxRing(ilvl){
-	if (ilvl >= $scope.ringThreshold) {
-		return "success";
-	} else {
-		return "danger";
-	}
-}
-
-function returnClassName(classId){
-	var classArray = ["","warrior","paladin","hunter","rogue","priest","death-knight","shaman","mage","warlock","monk","druid"];
-	return classArray[classId];
-}
-});
+}); /* end app.controller */
