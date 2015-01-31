@@ -2,8 +2,8 @@
   display: none !important;
 }
 
-.navbar-brand {
-  margin-left: 20px;
+.navbar {
+  padding-left: 20px;
 }
 
 .table tbody tr td:first-child::before {
