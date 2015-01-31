@@ -17,8 +17,8 @@
 	<body ng-app="guildRosterApp">
 		<div ng-controller="guildRosterCtrl">
 			<nav class="navbar navbar-default">
-				<span class="navbar-brand">{{guildName}}</span>
-				<span class="navbar-text">{{guildRealm}}</span>
+				<span class="navbar-brand">Shirley Templars</span>
+				<span class="navbar-text">Tichondrius</span>
 				<form class="navbar-form navbar-left">
 					<div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-user"></i></div>
@@ -45,12 +45,12 @@
 					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'BRF'}" ng-click="raid = 'BRF'; iLvlThreshold = iLvlBRF">Blackrock Foundry</button>
 				</div>
 			</nav>
-			<div ng-show="errorText" class="alert alert-danger" role="alert">
+			<div ng-cloak ng-show="errorText" class="alert alert-danger" role="alert">
 				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 				<span class="sr-only">Error:</span>
 				{{errorText}}
 			</div>
-			<table class="table table-hover">
+			<table ng-cloak class="table table-hover">
 				<thead>
 					<tr>
 						<th ng-click="orderByField='name'; reverseSort = !reverseSort">
