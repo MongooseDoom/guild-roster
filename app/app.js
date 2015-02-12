@@ -45,7 +45,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 
 		/* ilvl thresholds */
 		$scope.iLvlHM = 625;
-		$scope.iLvlBRF = 655;
+		$scope.iLvlBRF = 645;
 
 		$scope.iLvlThreshold = $scope.iLvlHM;
 		$scope.ringThreshold = 680;
