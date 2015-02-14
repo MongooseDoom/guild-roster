@@ -27,7 +27,6 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Memedom'},
 			{name: 'Mavester'},
 			{name: 'Sackotaterz'},
-			{name: 'Wroughtiron'},
 			{name: 'Tatersakk'},
 			{name: 'Faerietta'},
 			{name: 'Flatugen'},
