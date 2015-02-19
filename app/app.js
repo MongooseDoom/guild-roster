@@ -47,7 +47,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		$scope.iLvlBRF = 645;
 
 		$scope.iLvlThreshold = $scope.iLvlHM;
-		$scope.ringThreshold = 680;
+		$scope.ringThreshold = 690;
 
 		/* forms */
 		$scope.formRealm = $scope.guildRealm;
