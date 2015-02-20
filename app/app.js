@@ -37,6 +37,9 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	/* General Info */
 		$scope.errorText = '';
 		$scope.raid = 'HM';
+		$scope.raidNormal = 'highmaulNormal';
+		$scope.raidHeroic = 'highmaulHeroic';
+		$scope.raidMythic = 'highmaulMythic';
 
 		/* sort */
 		$scope.orderByField = 'items.averageItemLevelEquipped';
