@@ -22,7 +22,6 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Altrouge'},
 			{name: 'Tilias'},
 			{name: 'Heartgold'},
-			{name: 'Kamihy'},
 			{name: 'Vectron'},
 			{name: 'Memedom'},
 			{name: 'Mavester'},
@@ -30,7 +29,9 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Tatersakk'},
 			{name: 'Faerietta'},
 			{name: 'Flatugen'},
-			{name: 'Saluja'}
+			{name: 'Saluja'},
+			{name: 'Goradra'},
+			{name: 'Yrlokami'}
 		];
 		$scope.characters = [];
 
@@ -49,7 +50,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		$scope.iLvlHM = 625;
 		$scope.iLvlBRF = 645;
 
-		$scope.iLvlThreshold = $scope.iLvlHM;
+		$scope.iLvlThreshold = $scope.iLvlBRF;
 		$scope.ringThreshold = 690;
 
 		/* forms */
