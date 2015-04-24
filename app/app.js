@@ -18,18 +18,8 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Tirial'},
 			{name: 'Sunflowers'},
 			{name: 'Alexithymia'},
-			{name: 'Captnamerica'},
 			{name: 'Altrouge'},
-			{name: 'Tilias'},
 			{name: 'Heartgold'},
-			{name: 'Vectron'},
-			{name: 'Memedom'},
-			{name: 'Mavester'},
-			{name: 'Sackotaterz'},
-			{name: 'Tatersakk'},
-			{name: 'Faerietta'},
-			{name: 'Flatugen'},
-			{name: 'Saluja'},
 			{name: 'Goradra'},
 			{name: 'Yrlokami'}
 		];
