@@ -41,7 +41,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		$scope.iLvlBRF = 645;
 
 		$scope.iLvlThreshold = $scope.iLvlBRF;
-		$scope.ringThreshold = 690;
+		$scope.ringThreshold = 710;
 
 		/* forms */
 		$scope.formRealm = $scope.guildRealm;
@@ -123,7 +123,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	*/
 	$scope.addCharacter = function(character, realm){
 		$http.jsonp("http://"+$scope.regionHost+"/api/wow/character/"+realm+"/"+character+"?locale="+$scope.regionLocale+"&fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
-
+				console.log(data);
 				var killsforRaidId = function(raid_id){
 					var normal = 0,
 					heroic = 0,
