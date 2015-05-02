@@ -26,8 +26,9 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		$scope.characters = [];
 
 	/* General Info */
+		$scope.raids = ['HM','BRF',"HC"]
 		$scope.errorText = '';
-		$scope.raid = 'BRF';
+		$scope.raid = $scope.raids[1];
 		$scope.raidNormal = 'brfNormal';
 		$scope.raidHeroic = 'brfHeroic';
 		$scope.raidMythic = 'brfMythic';
@@ -39,6 +40,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		/* ilvl thresholds */
 		$scope.iLvlHM = 625;
 		$scope.iLvlBRF = 645;
+		$scope.iLvlHC = 645;
 
 		$scope.iLvlThreshold = $scope.iLvlBRF;
 		$scope.ringThreshold = 710;
@@ -155,6 +157,11 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
       			data.brfNormal = brf[0];
       			data.brfHeroic = brf[1];
       			data.brfMythic = brf[2];
+
+				var hc = killsforRaidId(33);
+      			data.hcNormal = hc[0];
+      			data.hcHeroic = hc[1];
+      			data.hcMythic = hc[2];
 
       			/* Add to characters */
 				$scope.characters.push(data);

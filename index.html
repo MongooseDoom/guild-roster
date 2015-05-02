@@ -43,6 +43,7 @@
 				<div class="btn-group navbar-form" role="group">
 					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'HM'}" ng-click="raid = 'HM'; iLvlThreshold = iLvlHM; raidNormal = 'highmaulNormal'; raidHeroic = 'highmaulHeroic'; raidMythic = 'highmaulMythic'">HM</button>
 					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'BRF'}" ng-click="raid = 'BRF'; iLvlThreshold = iLvlBRF; raidNormal = 'brfNormal'; raidHeroic = 'brfHeroic'; raidMythic = 'brfMythic'">BRF</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'HC'}" ng-click="raid = 'HC'; iLvlThreshold = iLvlHC; raidNormal = 'hcNormal'; raidHeroic = 'hcHeroic'; raidMythic = 'hcMythic'">HC</button>
 				</div>
 			</nav>
 			<div ng-cloak ng-show="errorText" class="alert alert-danger" role="alert">
