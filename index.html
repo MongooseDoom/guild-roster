@@ -174,7 +174,7 @@
 				<tbody>
 					<tr ng-repeat="character in characters | orderBy: orderByField : reverseSort | filter:searchRoster">
 						<td class="color-c{{character.class}} name"><a href="http://{{region}}.battle.net/wow/en/character/{{characterRealm}}/{{character.name}}/simple">{{character.name}}</a><div class="pull-right remove-character" ng-click="removeCharacter(character)" aria-label="Remove"><i class="glyphicon glyphicon-remove"></i></div></td>
-						<td>{{character.talents[0].spec.role | lowercase}}, {{character.talents[1].spec.role | lowercase}}</td>
+						<td>{{character.roles | lowercase}}</td>
 						<td ng-class="{'danger': (character.items.averageItemLevelEquipped < iLvlThreshold), 'success': (character.items.averageItemLevelEquipped >= iLvlThreshold)}">{{character.items.averageItemLevelEquipped}}</td>
 						<td ng-class="{'danger': (character.maxRing < ringThreshold), 'success': (character.maxRing >= ringThreshold)}">{{character.maxRing}}</td>
 						<td ng-class="{'danger': (character.items.head.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.head.quality}}"><a href="http://www.wowhead.com/item={{character.items.head.id}}" rel="item={{character.items.head.id}}">{{character.items.head.itemLevel}}</a></td>

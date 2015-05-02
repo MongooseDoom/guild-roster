@@ -163,6 +163,8 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
       			data.hcHeroic = hc[1];
       			data.hcMythic = hc[2];
 
+      			data.roles = (data.talents[0].spec.role == data.talents[1].spec.role) ? data.talents[0].spec.role : data.talents[0].spec.role + ', ' + data.talents[1].spec.role;
+
       			/* Add to characters */
 				$scope.characters.push(data);
 		}).error(function(data, status, hearders, config){
