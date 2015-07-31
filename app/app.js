@@ -18,7 +18,6 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Tirial'},
 			{name: 'Sunflowers'},
 			{name: 'Alexithymia'},
-			{name: 'Altrouge'},
 			{name: 'Heartgold'},
 			{name: 'Goradra'},
 			{name: 'Yrlokami'}
@@ -28,10 +27,10 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	/* General Info */
 		$scope.raids = ['HM','BRF',"HC"]
 		$scope.errorText = '';
-		$scope.raid = $scope.raids[1];
-		$scope.raidNormal = 'brfNormal';
-		$scope.raidHeroic = 'brfHeroic';
-		$scope.raidMythic = 'brfMythic';
+		$scope.raid = $scope.raids[2];
+		$scope.raidNormal = 'hcNormal';
+		$scope.raidHeroic = 'hcHeroic';
+		$scope.raidMythic = 'hcMythic';
 
 		/* sort */
 		$scope.orderByField = 'items.averageItemLevelEquipped';
@@ -40,10 +39,10 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		/* ilvl thresholds */
 		$scope.iLvlHM = 625;
 		$scope.iLvlBRF = 645;
-		$scope.iLvlHC = 645;
+		$scope.iLvlHC = 670;
 
-		$scope.iLvlThreshold = $scope.iLvlBRF;
-		$scope.ringThreshold = 710;
+		$scope.iLvlThreshold = $scope.iLvlHC;
+		$scope.ringThreshold = 735;
 
 		/* forms */
 		$scope.formRealm = $scope.guildRealm;
@@ -119,12 +118,37 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	}  /* end getEnchant() */
 
 	/**
+	* Checks item for gems
+	* @param {object} item - Item with gems
+	*/
+	$scope.getGems = function(item){
+		/* Gems */
+		var goodGems = [115815, 115814, 115809, 115811, 115812, 115813];
+		var badGems = [115807, 115805, 115803, 115804, 115806, 115808];
+
+		if (item.tooltipParams && item.tooltipParams["gem0"]) {
+			var gem;
+			if (goodGems.indexOf(item.tooltipParams["gem0"]) > -1) {
+				gem = "good-gem";
+			} else if (badGems.indexOf(item.tooltipParams["gem0"]) > -1) {
+				gem = "bad-gem";
+			} else {
+				gem = "no-gem";
+			}
+		} else {
+			gem = "";
+		}
+			return gem;
+	}  /* end getGems() */
+
+	/**
 	* Adds a character
 	* @param {string} character - The name of the character
 	* @param {string} realm - The name of the character's realm
 	*/
 	$scope.addCharacter = function(character, realm){
 		$http.jsonp("http://"+$scope.regionHost+"/api/wow/character/"+realm+"/"+character+"?locale="+$scope.regionLocale+"&fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
+				console.log(data.name);
 				console.log(data);
 				var killsforRaidId = function(raid_id){
 					var normal = 0,
@@ -145,6 +169,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 					data.items.offHand = "";
 					data.items.offHand.itemLevel = "";
 					data.items.offHand.quality = "";
+					data.items.offHand.tooltipParams = "";
 				}
 
 				/* Raid kills */
@@ -158,7 +183,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
       			data.brfHeroic = brf[1];
       			data.brfMythic = brf[2];
 
-				var hc = killsforRaidId(33);
+				var hc = killsforRaidId(34);
       			data.hcNormal = hc[0];
       			data.hcHeroic = hc[1];
       			data.hcMythic = hc[2];

@@ -132,6 +132,31 @@ table tbody tr {
   background: #ce8383;
 }
 
+.good-gem:after,
+.bad-gem:after,
+.no-gem:after {
+  content: '\2666';
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 18px;
+  line-height: 10px;
+  vertical-align: middle;
+  position: relative;
+  bottom: 2px;
+}
+
+.good-gem:after {
+  color: #93cd7c;
+}
+
+.bad-gem:after {
+  color: #f0db70;
+}
+
+.no-gem:after {
+  color: #ce8383;
+}
+
 #loading-bar,
 #loading-bar-spinner {
   pointer-events: none;
@@ -261,3 +286,5 @@ table tbody tr {
     transform: rotate(360deg);
   }
 }
+
+/*# sourceMappingURL=style.css.map */

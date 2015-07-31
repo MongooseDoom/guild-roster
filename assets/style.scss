@@ -68,6 +68,23 @@ table tbody tr { counter-increment: rowNumber; }
 .breath:before { background: darken(#fcf8e3, 25%); }
 .none:before { background: darken(#f2dede, 25%); }
 
+.good-gem:after,
+.bad-gem:after,
+.no-gem:after {
+  content: '\2666';
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 18px;
+  line-height: 10px;
+  vertical-align: middle;
+  position: relative;
+  bottom: 2px;
+}
+
+.good-gem:after { color: darken(#dff0d8, 25%); }
+.bad-gem:after { color: darken(#fcf8e3, 25%); }
+.no-gem:after { color: darken(#f2dede, 25%); }
+
 
 // ------------------------------------ //
 //     Loading Bar
