@@ -174,19 +174,22 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 
 				/* Raid kills */
 				var highmaul = killsforRaidId(32);
-				data.highmaulNormal = highmaul[0];
-				data.highmaulHeroic = highmaul[1];
-				data.highmaulMythic = highmaul[2];
+				data.highmaul = [];
+				data.highmaul[0] = highmaul[0];
+				data.highmaul[1] = highmaul[1];
+				data.highmaul[2] = highmaul[2];
 
 				var brf = killsforRaidId(33);
-      			data.brfNormal = brf[0];
-      			data.brfHeroic = brf[1];
-      			data.brfMythic = brf[2];
+				data.brf = [];
+      			data.brf[0] = brf[0];
+      			data.brf[1] = brf[1];
+      			data.brf[2] = brf[2];
 
 				var hc = killsforRaidId(34);
-      			data.hcNormal = hc[0];
-      			data.hcHeroic = hc[1];
-      			data.hcMythic = hc[2];
+				data.hc = [];
+      			data.hc[0] = hc[0];
+      			data.hc[1] = hc[1];
+      			data.hc[2] = hc[2];
 
       			data.roles = (data.talents[0].spec.role == data.talents[1].spec.role) ? data.talents[0].spec.role : data.talents[0].spec.role + ', ' + data.talents[1].spec.role;
 

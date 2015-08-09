@@ -41,9 +41,9 @@
 					<button type="button" class="btn btn-default" ng-class="{'active': guildList == 'custom'}" ng-click="characters = []; guildList = 'custom'">Custom</button>
 				</div>
 				<div class="btn-group navbar-form" role="group">
-					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'HM'}" ng-click="raid = 'HM'; iLvlThreshold = iLvlHM; raidNormal = 'highmaulNormal'; raidHeroic = 'highmaulHeroic'; raidMythic = 'highmaulMythic'">HM</button>
-					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'BRF'}" ng-click="raid = 'BRF'; iLvlThreshold = iLvlBRF; raidNormal = 'brfNormal'; raidHeroic = 'brfHeroic'; raidMythic = 'brfMythic'">BRF</button>
-					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'HC'}" ng-click="raid = 'HC'; iLvlThreshold = iLvlHC; raidNormal = 'hcNormal'; raidHeroic = 'hcHeroic'; raidMythic = 'hcMythic'">HC</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'HM'}" ng-click="raid = 'HM'; iLvlThreshold = iLvlHM; raidNormal = 'highmaul[0]'; raidHeroic = 'highmaul[1]'; raidMythic = 'highmaul[2]'">HM</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'BRF'}" ng-click="raid = 'BRF'; iLvlThreshold = iLvlBRF; raidNormal = 'brf[0]'; raidHeroic = 'brf[1]'; raidMythic = 'brf[2]'">BRF</button>
+					<button type="button" class="btn btn-default" ng-class="{'active': raid == 'HC'}" ng-click="raid = 'HC'; iLvlThreshold = iLvlHC; raidNormal = 'hc[0]'; raidHeroic = 'hc[1]'; raidMythic = 'hc[2]'">HC</button>
 				</div>
 			</nav>
 			<div ng-cloak ng-show="errorText" class="alert alert-danger" role="alert">
@@ -194,19 +194,19 @@
 						<td ng-class="{'danger': (character.items.mainHand.itemLevel <= iLvlThreshold)}" class="color-q{{character.items.mainHand.quality}} {{getEnchant(character.items.mainHand)}} {{getGems(character.items.mainHand)}}"><a href="http://www.wowhead.com/item={{character.items.mainHand.id}}" rel="item={{character.items.mainHand.id}}">{{character.items.mainHand.itemLevel}}</a></td>
 						<td ng-class="{'danger': (character.items.offHand.itemLevel && character.items.offHand <= iLvlThreshold)} {{getGems(character.items.offHand)}}" class="color-q{{character.items.offHand.quality}}"><a href="http://www.wowhead.com/item={{character.items.offHand.id}}" rel="item={{character.items.offHand.id}}">{{character.items.offHand.itemLevel}}</a></td>
 						<td>
-							<span ng-show="raid == 'HM'">{{character.highmaulNormal}}</span>
-							<span ng-show="raid == 'BRF'">{{character.brfNormal}}</span>
-							<span ng-show="raid == 'HC'">{{character.hcNormal}}</span>
+							<span ng-show="raid == 'HM'">{{character.highmaul[0]}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brf[0]}}</span>
+							<span ng-show="raid == 'HC'">{{character.hc[0]}}</span>
 						</td>
 						<td>
-							<span ng-show="raid == 'HM'">{{character.highmaulHeroic}}</span>
-							<span ng-show="raid == 'BRF'">{{character.brfHeroic}}</span>
-							<span ng-show="raid == 'HC'">{{character.hcHeroic}}</span>
+							<span ng-show="raid == 'HM'">{{character.highmaul[1]}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brf[1]}}</span>
+							<span ng-show="raid == 'HC'">{{character.hc[1]}}</span>
 						</td>
 						<td>
-							<span ng-show="raid == 'HM'">{{character.highmaulMythic}}</span>
-							<span ng-show="raid == 'BRF'">{{character.brfMythic}}</span>
-							<span ng-show="raid == 'HC'">{{character.hcMythic}}</span>
+							<span ng-show="raid == 'HM'">{{character.highmaul[2]}}</span>
+							<span ng-show="raid == 'BRF'">{{character.brf[2]}}</span>
+							<span ng-show="raid == 'HC'">{{character.hc[2]}}</span>
 						</td>
 					</tr>
 				</tbody>
