@@ -20,7 +20,8 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Alexithymia'},
 			{name: 'Heartgold'},
 			{name: 'Goradra'},
-			{name: 'Yrlokami'}
+			{name: 'Yrlokami'},
+			{name: 'Altrouge'}
 		];
 		$scope.characters = [];
 
