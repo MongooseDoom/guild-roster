@@ -32,47 +32,6 @@
 table { counter-reset: rowNumber; }
 table tbody tr { counter-increment: rowNumber; }
 
-@media screen and (max-width: 600px) {
-
-  table {
-    border: 0;
-  }
-
-  table thead {
-    display: none;
-  }
-
-  table tr {
-    margin-bottom: 10px;
-    display: block;
-    border-bottom: 2px solid #ddd;
-  }
-
-  .table-hover>tbody>tr:hover {
-    background: #fff;
-  }
-
-  table td {
-    display: block;
-    min-height: 36px;
-    text-align: right;
-    font-size: 13px;
-    border-bottom: 1px dotted #ccc;
-  }
-
-  table td:last-child {
-    border-bottom: 0;
-  }
-
-  table td:before {
-    content: attr(data-label);
-    float: left;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #000;
-  }
-}
-
 // icons
 .glyphicon-triangle-bottom, .glyphicon-triangle-top { font-size: 10px; }
 
@@ -139,6 +98,57 @@ table tbody tr { counter-increment: rowNumber; }
 .good-gem a:after { color: darken(#dff0d8, 25%); }
 .bad-gem a:after { color: darken(#fcf8e3, 25%); }
 .no-gem a:after { color: darken(#f2dede, 25%); }
+
+// ------------------------------------ //
+//     Mobile Table
+// ------------------------------------ //
+
+@media screen and (max-width: 600px) {
+
+  table {
+    border: 0;
+  }
+
+  table thead {
+    display: none;
+  }
+
+  table tr {
+    margin-bottom: 10px;
+    display: block;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .table-hover>tbody>tr:hover {
+    background: #fff;
+  }
+
+  table td {
+    display: block;
+    min-height: 36px;
+    text-align: right;
+    font-size: 13px;
+    border-top: 1px dotted #ccc;
+  }
+
+  table td:first-child {
+    border-top: 0;
+  }
+
+  table td:before {
+    content: attr(data-label);
+    float: left;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #000;
+  }
+
+  .table tbody tr td:first-child {
+    text-align: left;
+    font-weight: bold;
+  }
+  .remove-character { visibility: visible; }
+}
 
 
 // ------------------------------------ //
