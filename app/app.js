@@ -149,8 +149,6 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	*/
 	$scope.addCharacter = function(character, realm){
 		$http.jsonp("http://"+$scope.regionHost+"/api/wow/character/"+realm+"/"+character+"?locale="+$scope.regionLocale+"&fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
-				console.log(data.name);
-				console.log(data);
 				var killsforRaidId = function(raid_id){
 					var normal = 0,
 					heroic = 0,
@@ -197,7 +195,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
       			/* Add to characters */
 				$scope.characters.push(data);
 		}).error(function(data, status, hearders, config){
-    			$scope.errorText = "Can not get character";
+    			$scope.errorText = "Could not load "+character+" - "+realm;
     	}); // end jsonp()
 	}; /* end addCharacter() */
 
