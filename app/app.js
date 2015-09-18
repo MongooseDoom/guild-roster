@@ -17,12 +17,17 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Kartekk'},
 			{name: 'Tirial'},
 			{name: 'Sunflowers'},
-			{name: 'Alexithymia'},
 			{name: 'Heartgold'},
-			{name: 'Goradra'},
 			{name: 'Yrlokami'},
 			{name: 'Altrouge'},
-			{name: 'Aphidy'}
+			{name: 'Senaris',realm:'Thrall'},
+			{name: 'Ranmaru',realm:'Thrall'},
+			{name: 'Jimmydives',realm:'Thrall'},
+			{name: 'Berkstein',realm:'Thrall'},
+			{name: 'Liashura',realm:'Thrall'},
+			{name: 'Zeriana',realm:'Thrall'},
+			{name: 'Yunaiv',realm:'Thrall'},
+			{name: 'Khoshekh',realm:'Thrall'},
 		];
 		$scope.characters = [];
 
@@ -72,7 +77,10 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 		$scope.characters = [];
 		if (characters) {
 			angular.forEach($scope.guildMembers, function(member, index) {
-				$scope.addCharacter(member.name, $scope.guildRealm);
+				if (!member.realm) {
+					member.realm = $scope.guildRealm;
+				}
+				$scope.addCharacter(member.name, member.realm);
 			});
 		} else {
 			$scope.getGuildList();
@@ -150,6 +158,8 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 	*/
 	$scope.addCharacter = function(character, realm){
 		$http.jsonp("http://"+$scope.regionHost+"/api/wow/character/"+realm+"/"+character+"?locale="+$scope.regionLocale+"&fields=items,talents,statistics,progression&jsonp=JSON_CALLBACK").success(function(data, status, hearders, config){
+				console.log(data);
+
 				var killsforRaidId = function(raid_id){
 					var normal = 0,
 					heroic = 0,

@@ -183,7 +183,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="character in characters | orderBy: orderByField : reverseSort | filter:searchRoster">
-						<td data-label="Name" class="color-c{{character.class}} name"><a href="http://{{region}}.battle.net/wow/en/character/{{characterRealm}}/{{character.name}}/simple">{{character.name}}</a><div class="pull-right remove-character" ng-click="removeCharacter(character)" aria-label="Remove"><i class="glyphicon glyphicon-remove"></i></div></td>
+						<td data-label="Name" class="color-c{{character.class}} name"><a href="http://{{regionHost}}/wow/en/character/{{character.realm}}/{{character.name}}/simple">{{character.name}}</a><div class="pull-right remove-character" ng-click="removeCharacter(character)" aria-label="Remove"><i class="glyphicon glyphicon-remove"></i></div></td>
 						<td data-label="Roles">{{character.roles | lowercase}}</td>
 						<td data-label="iLevel" ng-class="{'danger': (character.items.averageItemLevelEquipped < iLvlThreshold), 'success': (character.items.averageItemLevelEquipped >= iLvlThreshold)}">{{character.items.averageItemLevelEquipped}}</td>
 						<td data-label="Ring" ng-class="{'danger': (character.maxRing < ringThreshold), 'success': (character.maxRing >= ringThreshold)}">{{character.maxRing}}</td>
