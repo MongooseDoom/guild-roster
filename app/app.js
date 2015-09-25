@@ -20,6 +20,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Heartgold'},
 			{name: 'Yrlokami'},
 			{name: 'Altrouge'},
+			{name: 'Heartstone'},
 			{name: 'Senaris',realm:'Thrall'},
 			{name: 'Ranmaru',realm:'Thrall'},
 			{name: 'Jimmydives',realm:'Thrall'},
@@ -27,7 +28,7 @@ app.controller('guildRosterCtrl', function ($scope, $http) {
 			{name: 'Liashura',realm:'Thrall'},
 			{name: 'Zeriana',realm:'Thrall'},
 			{name: 'Yunaiv',realm:'Thrall'},
-			{name: 'Khoshekh',realm:'Thrall'},
+			{name: 'Khoshekh',realm:'Thrall'}
 		];
 		$scope.characters = [];
 
